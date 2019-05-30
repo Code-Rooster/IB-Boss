@@ -26,7 +26,6 @@ public class DialogueManager : MonoBehaviour
     public Color32 mechanicColor;
 
     public int sentenceCount;
-    public int calledCount;
 
     List<int> jitterWords = new List<int>();
 
@@ -45,11 +44,13 @@ public class DialogueManager : MonoBehaviour
 
     void OnEnable()
     {
+        //Add the ON_TEXT_CHANGED event to TMP's event manager so that it can keep track of text changes
         TMPro_EventManager.TEXT_CHANGED_EVENT.Add(ON_TEXT_CHANGED);
     }
 
     void OnDisable()
     {
+        //Remove the ON_TEXT_CHANGED event
         TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
     }
 
@@ -61,41 +62,51 @@ public class DialogueManager : MonoBehaviour
 
     void ON_TEXT_CHANGED(Object obj)
     {
+        //If the text has just changed notify the rest of the script
         if (obj == dialogueText)
             hasTextChanged = true;
     }
 
-    public void startDialogue(Dialogue dialogue, TextEffects[] tFX)
+    public void StartDialogue(Dialogue dialogue, TextEffects[] tFX)
     {
+        //Clear the sentence queue
         sentences.Clear();
 
         startedDialogue = true;
-        sentenceCount = 0;
+        sentenceCount = -1;
 
         foreach (string sentence in dialogue.sentences)
         {
+            //Queue up every sentence
             sentences.Enqueue(sentence);
         }
 
+        //Get the text effects from the parameter so that we can work with it
         textFX = tFX;
 
+        //Make all of the characters invisible
         dialogueText.maxVisibleCharacters = 0;
 
-        displayNextSentence();
+        DisplayNextSentence();
     }
 
-    public void displayNextSentence()
+    public void DisplayNextSentence()
     {
+        sentenceCount += 1;
+
         if (sentences.Count == 0)
         {
-            endDialogue();
+            //If there's no more sentences just return out of the function after ending the dialogue
+            EndDialogue();
             return;
         }
 
         StopAllCoroutines();
 
+        //Set the current sentence to the first sentence in the queue
         currentSentence = sentences.Dequeue();
 
+        //Pre determine the vertexAnim variables for the text jitter effect
         vertexAnim = null;
         vertexAnim = new VertexAnim[1024];
 
@@ -107,61 +118,91 @@ public class DialogueManager : MonoBehaviour
 
         jitterWords.Clear();
 
-        StartCoroutine("typeSentence");
+        StartCoroutine("TypeSentence");
     }
 
-    IEnumerator typeSentence()
+    IEnumerator TypeSentence()
     {
         isTyping = true;
-
-        print("Words in this sentence: " + currentSentence.Split(' ').Length);
-
         dialogueText.text = "";
         dialogueText.text = currentSentence;
 
+        //Make all of the characters invisible
         dialogueText.maxVisibleCharacters = 0;
 
-        if (textFX[sentenceCount].jitterAll == true && textFX[sentenceCount].jitterIndexes.Length == 0)
+        //If all of the sentence has to be jittery and there's no other specified words to jitter
+        if (textFX[sentenceCount].jitterAll == true)
         {
             for (int x = 0; x < currentSentence.Split(' ').Length; x++)
             {
-                print("Adding a Jitterword");
-
+                //Add everything separated by a space
                 jitterWords.Add(x);
             }
         }
+        else if (textFX[sentenceCount].jitterIndexes.Length != 0)
+        {
+            foreach (int jitterNum in textFX[sentenceCount].jitterIndexes)
+            {
+                jitterWords.Add(jitterNum);
+            }
+        }
 
+        //If the text has to be jittered at all
+        if (textFX[sentenceCount].jitterIndexes.Length != 0 || textFX[sentenceCount].jitterAll)
+        {
+            StartCoroutine(TextJitter());
+        }
+
+        //Iterate through every character in the sentence
         for (int i = 0; i < currentSentence.ToCharArray().Length; i++)
         {
+            StopCoroutine(TextJitter());
+
+            //Make the current character visible
             dialogueText.maxVisibleCharacters += 1;
 
-            if (textFX[sentenceCount].jitterIndexes.Length != 0 || textFX[sentenceCount].jitterAll)
+            if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
             {
-                StartCoroutine(textMods());
+                SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
+            }
+            if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
+            {
+                SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
+            }
+            if (textFX[sentenceCount].wordColors.redWords.Length != 0)
+            {
+                SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
+            }
+            if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
+            {
+                SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
             }
 
             yield return new WaitForSeconds(typeSpeed);
         }
-        isTyping = false;
 
-        sentenceCount += 1;
+        isTyping = false;
     }
 
-    public void skipAhead()
+    public void SkipAhead()
     {
-        StopCoroutine("typeSentence");
+        //Stop typing
+        StopAllCoroutines();
         isTyping = false;
 
         dialogueText.text = "";
         dialogueText.text = currentSentence;
 
+        //Make all of the characters invisible
         dialogueText.maxVisibleCharacters = 0;
-        
+
+        //Make all of the characters visible
         dialogueText.maxVisibleCharacters = currentSentence.ToCharArray().Length;
 
+        //If there's any text to jitter
         if (textFX[sentenceCount].jitterIndexes.Length != 0)
         {
-            StartCoroutine(textMods());
+            StartCoroutine(TextJitter());
         }
         else if (textFX[sentenceCount].jitterAll == true)
         {
@@ -169,13 +210,30 @@ public class DialogueManager : MonoBehaviour
             {
                 jitterWords.Add(x);
             }
-            StartCoroutine(textMods());
+            StartCoroutine(TextJitter());
         }
-        sentenceCount += 1;
+
+        if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
+        {
+            SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
+        }
+        if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
+        {
+            SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
+        }
+        if (textFX[sentenceCount].wordColors.redWords.Length != 0)
+        {
+            SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
+        }
+        if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
+        {
+            SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
+        }
     }
 
-    public void endDialogue()
+    public void EndDialogue()
     {
+        //Make all of the characters invisible
         dialogueText.maxVisibleCharacters = 0;
         dialogueText.text = "";
 
@@ -184,11 +242,8 @@ public class DialogueManager : MonoBehaviour
         startedDialogue = false;
     }
 
-    IEnumerator textMods()
+    IEnumerator TextJitter()
     {
-        calledCount++;
-        //print("Called " + calledCount + " times");
-
         List<TMP_WordInfo> wInfo;
 
         wInfo = new List<TMP_WordInfo>();
@@ -206,19 +261,39 @@ public class DialogueManager : MonoBehaviour
             wordsToJitter = textFX[sentenceCount].jitterIndexes;
         }
 
-        //print("WordsToJitter length: " + wordsToJitter.Length);
-
         while (true)
         {
-            dialogueText.ForceMeshUpdate(true);
+            if (sentenceCount < textFX.Length)
+            {
+                if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
+                {
+                    SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
+                }
+                else if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
+                {
+                    SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
+                }
+                else if (textFX[sentenceCount].wordColors.redWords.Length != 0)
+                {
+                    SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
+                }
+                else if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
+                {
+                    SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
+                }
+                else
+                {
+                    dialogueText.ForceMeshUpdate(true);
+                }
+            }
 
             wInfo.Clear();
 
             foreach (int wordIndex in wordsToJitter)
             {
+                //Add each word's wordInfo
                 wInfo.Add(dialogueText.textInfo.wordInfo[wordIndex]);
             }
-            //print("wInfo length: " + wInfo.Count);
 
             Matrix4x4 matrix;
 
@@ -227,6 +302,8 @@ public class DialogueManager : MonoBehaviour
 
             List<TMP_MeshInfo[]> cachedMeshInfo;
             cachedMeshInfo = new List<TMP_MeshInfo[]>();
+            cachedMeshInfo.Clear();
+
             foreach (TMP_WordInfo wordInfo in wInfo)
             {
                 cachedMeshInfo.Add(wordInfo.textComponent.textInfo.CopyMeshInfoVertexData());
@@ -246,7 +323,6 @@ public class DialogueManager : MonoBehaviour
             {
                 foreach (TMP_MeshInfo[] cMI in cachedMeshInfo)
                 {
-
                     int characterCount = info.characterCount;
 
                     if (characterCount == 0)
@@ -255,7 +331,6 @@ public class DialogueManager : MonoBehaviour
                         continue;
                     }
 
-
                     for (int i = 0; i < characterCount; i++)
                     {
                         int charIndex = info.firstCharacterIndex + i;
@@ -263,7 +338,9 @@ public class DialogueManager : MonoBehaviour
                         TMP_CharacterInfo charInfo = dialogueText.textInfo.characterInfo[charIndex];
 
                         if (!charInfo.isVisible)
+                        {
                             continue;
+                        }
 
                         VertexAnim vertAnim = vertexAnim[charIndex];
 
@@ -313,6 +390,29 @@ public class DialogueManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
             
+        }
+    }
+
+    public void SetTextColor(Color32 color, int[] wordIndexes)
+    {
+        dialogueText.ForceMeshUpdate(true);
+
+        for (int j = 0; j < wordIndexes.Length; j++)
+        {
+            TMP_WordInfo info = dialogueText.textInfo.wordInfo[wordIndexes[j]];
+            for (int i = 0; i < info.characterCount; ++i)
+            {
+                int charIndex = info.firstCharacterIndex + i;
+                int meshIndex = dialogueText.textInfo.characterInfo[charIndex].materialReferenceIndex;
+                int vertexIndex = dialogueText.textInfo.characterInfo[charIndex].vertexIndex;
+
+                Color32[] vertexColors = dialogueText.textInfo.meshInfo[meshIndex].colors32;
+                vertexColors[vertexIndex + 0] = color;
+                vertexColors[vertexIndex + 1] = color;
+                vertexColors[vertexIndex + 2] = color;
+                vertexColors[vertexIndex + 3] = color;
+            }
+            dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
         }
     }
 }

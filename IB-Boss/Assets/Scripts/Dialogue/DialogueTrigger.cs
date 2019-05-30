@@ -27,15 +27,15 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (!dM.startedDialogue)
         {
-            dM.startDialogue(dialogue, tFX);
+            dM.StartDialogue(dialogue, tFX);
         }
         else if (dM.startedDialogue && !dM.isTyping)
         {
-            dM.displayNextSentence();
+            dM.DisplayNextSentence();
         }
         else if (dM.startedDialogue && dM.isTyping)
         {
-            dM.skipAhead();
+            dM.SkipAhead();
         }
     }
 }

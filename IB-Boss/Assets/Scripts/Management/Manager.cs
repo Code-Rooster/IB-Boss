@@ -8,4 +8,17 @@ public class Manager : MonoBehaviour
     {
         Screen.fullScreen = false;
     }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Tab"))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            Application.Quit();
+        }
+    }
 }

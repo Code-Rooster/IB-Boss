@@ -8,6 +8,8 @@ public class DialogueManager : MonoBehaviour
 {
     private TextEffects[] textFX;
 
+    public DialogueBox dB;
+
     VertexAnim[] vertexAnim = new VertexAnim[1024];
 
     private Queue<string> sentences;
@@ -35,6 +37,8 @@ public class DialogueManager : MonoBehaviour
     public float typeSpeed = 0.02f;
     public float jitterFactor;
 
+    public Animator dialogueAnim;
+
     private struct VertexAnim
     {
         public float angleRange;
@@ -57,6 +61,8 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
+
+        dB = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<DialogueBox>();
     }
 
 
@@ -88,6 +94,9 @@ public class DialogueManager : MonoBehaviour
         dialogueText.maxVisibleCharacters = 0;
 
         DisplayNextSentence();
+
+        //Open the Dialogue Box
+        dialogueAnim.Play("OpenDialogue");
     }
 
     public void DisplayNextSentence()
@@ -123,6 +132,8 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator TypeSentence()
     {
+        yield return new WaitUntil(() => dB.isOpen);
+
         isTyping = true;
         dialogueText.text = "";
         dialogueText.text = currentSentence;
@@ -240,6 +251,8 @@ public class DialogueManager : MonoBehaviour
         StopAllCoroutines();
 
         startedDialogue = false;
+
+        dialogueAnim.Play("CloseDialogue");
     }
 
     IEnumerator TextJitter()

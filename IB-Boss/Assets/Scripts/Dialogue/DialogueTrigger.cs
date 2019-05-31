@@ -19,21 +19,21 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit"))
         {
-            triggerDialogue();
+            TriggerDialogue();
         }
     }
 
-    public void triggerDialogue()
+    public void TriggerDialogue()
     {
         if (!dM.startedDialogue)
         {
             dM.StartDialogue(dialogue, tFX);
         }
-        else if (dM.startedDialogue && !dM.isTyping)
+        else if (dM.startedDialogue && !dM.isTyping && dM.dB.isOpen)
         {
             dM.DisplayNextSentence();
         }
-        else if (dM.startedDialogue && dM.isTyping)
+        else if (dM.startedDialogue && dM.isTyping && dM.dB.isOpen)
         {
             dM.SkipAhead();
         }

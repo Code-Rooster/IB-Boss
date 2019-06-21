@@ -6,6 +6,11 @@ TagManager:
   tags:
   - DM
   - DialogueBox
+  - Moveable
+  - Room
+  - RoomManager
+  - HorizontalWall
+  - VerticalWall
   layers:
   - Default
   - TransparentFX
@@ -15,9 +20,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Player
+  - CameraCollision
+  - Wall
   - 
   - 
   - 

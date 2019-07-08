@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    public GameObject CurrentRoom;
+
     void Start()
     {
         Screen.fullScreen = false;

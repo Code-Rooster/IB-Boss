@@ -8,9 +8,9 @@ TagManager:
   - DialogueBox
   - Moveable
   - Room
-  - RoomManager
   - HorizontalWall
   - VerticalWall
+  - Manager
   layers:
   - Default
   - TransparentFX
@@ -23,8 +23,8 @@ TagManager:
   - Player
   - CameraCollision
   - Wall
-  - 
-  - 
+  - Rooms
+  - Lights
   - 
   - 
   - 

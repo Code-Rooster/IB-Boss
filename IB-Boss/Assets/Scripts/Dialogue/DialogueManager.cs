@@ -7,6 +7,8 @@ using TMPro;
 public class DialogueManager : MonoBehaviour
 {
     private TextEffects[] textFX;
+    private Dialogue dialogue;
+    private DialogueTrigger dT;
 
     public DialogueBox dB;
 
@@ -15,6 +17,7 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
 
     public TMPro.TMP_Text dialogueText;
+    public TMPro.TMP_Text nameText;
 
     public string currentSentence;
 
@@ -73,8 +76,13 @@ public class DialogueManager : MonoBehaviour
             hasTextChanged = true;
     }
 
-    public void StartDialogue(Dialogue dialogue, TextEffects[] tFX)
+    public void StartDialogue(Dialogue d, TextEffects[] tFX, string name, DialogueTrigger DT)
     {
+        dialogue = d;
+        dT = DT;
+
+        nameText.text = name;
+
         //Clear the sentence queue
         sentences.Clear();
 
@@ -95,8 +103,11 @@ public class DialogueManager : MonoBehaviour
 
         DisplayNextSentence();
 
-        //Open the Dialogue Box
-        dialogueAnim.Play("OpenDialogue");
+        if (!dB.isOpen)
+        {
+            //Open the Dialogue Box
+            dialogueAnim.Play("OpenDialogue");
+        }
     }
 
     public void DisplayNextSentence()
@@ -142,57 +153,64 @@ public class DialogueManager : MonoBehaviour
         dialogueText.maxVisibleCharacters = 0;
 
         //If all of the sentence has to be jittery and there's no other specified words to jitter
-        if (textFX[sentenceCount].jitterAll == true)
+        if (textFX.Length != 0)
         {
-            for (int x = 0; x < currentSentence.Split(' ').Length; x++)
+            if (textFX[sentenceCount] != null)
             {
-                //Add everything separated by a space
-                jitterWords.Add(x);
+                if (textFX[sentenceCount].jitterAll == true)
+                {
+                    for (int x = 0; x < currentSentence.Split(' ').Length; x++)
+                    {
+                        //Add everything separated by a space
+                        jitterWords.Add(x);
+                    }
+                }
+                else if (textFX[sentenceCount].jitterIndexes.Length != 0)
+                {
+                    foreach (int jitterNum in textFX[sentenceCount].jitterIndexes)
+                    {
+                        jitterWords.Add(jitterNum);
+                    }
+                }
+
+
+                //If the text has to be jittered at all
+                if (textFX[sentenceCount].jitterIndexes.Length != 0 || textFX[sentenceCount].jitterAll)
+                {
+                    StartCoroutine(TextJitter());
+                }
             }
+
+            //Iterate through every character in the sentence
+            for (int i = 0; i < currentSentence.ToCharArray().Length; i++)
+            {
+                StopCoroutine(TextJitter());
+
+                //Make the current character visible
+                dialogueText.maxVisibleCharacters += 1;
+
+                if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
+                {
+                    SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
+                }
+                if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
+                {
+                    SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
+                }
+                if (textFX[sentenceCount].wordColors.redWords.Length != 0)
+                {
+                    SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
+                }
+                if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
+                {
+                    SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
+                }
+
+                yield return new WaitForSeconds(typeSpeed);
+            }
+
+            isTyping = false;
         }
-        else if (textFX[sentenceCount].jitterIndexes.Length != 0)
-        {
-            foreach (int jitterNum in textFX[sentenceCount].jitterIndexes)
-            {
-                jitterWords.Add(jitterNum);
-            }
-        }
-
-        //If the text has to be jittered at all
-        if (textFX[sentenceCount].jitterIndexes.Length != 0 || textFX[sentenceCount].jitterAll)
-        {
-            StartCoroutine(TextJitter());
-        }
-
-        //Iterate through every character in the sentence
-        for (int i = 0; i < currentSentence.ToCharArray().Length; i++)
-        {
-            StopCoroutine(TextJitter());
-
-            //Make the current character visible
-            dialogueText.maxVisibleCharacters += 1;
-
-            if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
-            {
-                SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
-            }
-            if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
-            {
-                SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
-            }
-            if (textFX[sentenceCount].wordColors.redWords.Length != 0)
-            {
-                SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
-            }
-            if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
-            {
-                SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
-            }
-
-            yield return new WaitForSeconds(typeSpeed);
-        }
-
-        isTyping = false;
     }
 
     public void SkipAhead()
@@ -252,7 +270,21 @@ public class DialogueManager : MonoBehaviour
 
         startedDialogue = false;
 
-        dialogueAnim.Play("CloseDialogue");
+        switch (dialogue.endCondition)
+        {
+            case Dialogue.EndCondtion.NextDialogue:
+                dialogueAnim.Play("CloseDialogue");
+                dT.dialogueIndex++;
+                break;
+            case Dialogue.EndCondtion.TriggerDialogue:
+                dT.dialogueIndex++;
+                dialogue.dT.dialogueIndex = dialogue.triggerIndex;
+                dialogue.dT.TriggerDialogue();
+                break;
+            case Dialogue.EndCondtion.Nothing:
+                dialogueAnim.Play("CloseDialogue");
+                break;
+        }
     }
 
     IEnumerator TextJitter()

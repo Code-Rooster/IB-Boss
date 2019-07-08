@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator anim;
 
+    public bool canMove = true;
+    public bool canEnter = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -33,9 +36,12 @@ public class PlayerMovement : MonoBehaviour
             isMoving = false;
         }
 
-        rb.velocity = movement;
+        if (canMove)
+        {
+            rb.velocity = movement;
 
-        anim.SetFloat("xMovement", movement.x);
-        anim.SetFloat("yMovement", movement.y);
+            anim.SetFloat("xMovement", movement.x);
+            anim.SetFloat("yMovement", movement.y);
+        }
     }
 }

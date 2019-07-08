@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+[SerializeField]
 public class DialogueTrigger : MonoBehaviour
 {
-    public Dialogue dialogue;
+    private DialogueManager dM;
+    public Dialogue[] dialogue;
     public TextEffects[] tFX;
 
-    private DialogueManager dM;
+    public string name;
+
+    public int dialogueIndex;
+
+    private bool canInteract = false;
 
     private void Start()
     {
@@ -17,7 +23,7 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") && canInteract)
         {
             TriggerDialogue();
         }
@@ -27,7 +33,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (!dM.startedDialogue)
         {
-            dM.StartDialogue(dialogue, tFX);
+            dM.StartDialogue(dialogue[dialogueIndex], tFX, name, this);
         }
         else if (dM.startedDialogue && !dM.isTyping && dM.dB.isOpen)
         {
@@ -36,6 +42,22 @@ public class DialogueTrigger : MonoBehaviour
         else if (dM.startedDialogue && dM.isTyping && dM.dB.isOpen)
         {
             dM.SkipAhead();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.tag == "Player")
+        {
+            canInteract = false;
         }
     }
 }

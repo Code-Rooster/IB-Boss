@@ -8,7 +8,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     private DialogueManager dM;
     public Dialogue[] dialogue;
-    public TextEffects[] tFX;
+    //public TextEffects[] tFX;
 
     public string name;
 
@@ -33,7 +33,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (!dM.startedDialogue)
         {
-            dM.StartDialogue(dialogue[dialogueIndex], tFX, name, this);
+            dM.StartDialogue(dialogue[dialogueIndex], name, this);
         }
         else if (dM.startedDialogue && !dM.isTyping && dM.dB.isOpen)
         {

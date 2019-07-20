@@ -6,9 +6,10 @@ using TMPro;
 
 [System.Serializable]
 
-public class TextEffects : MonoBehaviour
+public class JitterEffect : MonoBehaviour
 {
     private DialogueManager dM;
+    private ColorEffect cE;
 
     public float AngleMultiplier = 1.0f;
     public float SpeedMultiplier = 1.0f;
@@ -20,7 +21,8 @@ public class TextEffects : MonoBehaviour
 
     private void Start()
     {
-        dM = GameObject.FindGameObjectWithTag("DM").GetComponent<DialogueManager>();
+        dM = this.gameObject.GetComponent<DialogueManager>();
+        cE = this.gameObject.GetComponent<ColorEffect>();
     }
 
     private struct VertexAnim
@@ -37,57 +39,34 @@ public class TextEffects : MonoBehaviour
             hasTextChanged = true;
     }
 
-    public void ColorText(Color32 color, int[] wordIndexes)
-    {
-        dM.dialogueText.ForceMeshUpdate(true);
-
-        for (int j = 0; j < wordIndexes.Length; j++)
-        {
-            TMP_WordInfo info = dM.dialogueText.textInfo.wordInfo[wordIndexes[j]];
-            for (int i = 0; i < info.characterCount; ++i)
-            {
-                int charIndex = info.firstCharacterIndex + i;
-                int meshIndex = dM.dialogueText.textInfo.characterInfo[charIndex].materialReferenceIndex;
-                int vertexIndex = dM.dialogueText.textInfo.characterInfo[charIndex].vertexIndex;
-
-                Color32[] vertexColors = dM.dialogueText.textInfo.meshInfo[meshIndex].colors32;
-                vertexColors[vertexIndex + 0] = color;
-                vertexColors[vertexIndex + 1] = color;
-                vertexColors[vertexIndex + 2] = color;
-                vertexColors[vertexIndex + 3] = color;
-            }
-            dM.dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
-        }
-    }
-
-    IEnumerator TextJitter(int[] jitterIndices)
+    public IEnumerator TextJitter(int[] jitterIndices)
     {
         List<TMP_WordInfo> wInfo;
 
         wInfo = new List<TMP_WordInfo>();
 
+        //Pre determine the vertexAnim variables for the text jitter effect
+        //THIS MAY CAUSE LAG
+        vertexAnim = null;
+        vertexAnim = new VertexAnim[1024];
+
+        for (int i = 0; i < 1024; i++)
+        {
+            vertexAnim[i].angleRange = Random.Range(10f, 25f);
+            vertexAnim[i].speed = Random.Range(1f, 3f);
+        }
+        //Lag over
+
+
         while (true)
         {
-            //if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
-            //{
-            //SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
-            //{
-            //SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.redWords.Length != 0)
-            //{
-            //SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
-            //{
-            //SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
-            //}
-
-            //else
+            if (!cE.isColoring)
             {
                 dM.dialogueText.ForceMeshUpdate(true);
+            }
+            else
+            {
+                cE.ColorText(dM.mD.colorIndices.ToArray());
             }
 
             wInfo.Clear();

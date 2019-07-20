@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class ConditionDetection : MonoBehaviour
 {
-    string[] modifiers = { "~", "#" };
+    string[] modifiers = { "~", "#", "%" };
 
-    Regex[] modReges = {new Regex(@"\~.*?\~"), new Regex(@"\#.*?#")};
+    Regex[] modReges = {new Regex(@"\~.*?\~"), new Regex(@"\#.*?#"), new Regex(@"\%.*?%") };
 
     public ModifiedDialogue FindMods(string sentence)
     {
@@ -16,6 +16,8 @@ public class ConditionDetection : MonoBehaviour
         string finishedSentence = sentence;
 
         List<int> jitterIndices = new List<int>();
+        List<int> keyIndices = new List<int>();
+        List<int> redIndices = new List<int>();
 
         for (int x = 0; x < modifiers.Length; x++)
         {
@@ -51,13 +53,38 @@ public class ConditionDetection : MonoBehaviour
                     }
                     else if (modifiers[x] == "#")
                     {
-
+                        keyIndices.Add(i + startingIndex);
+                    }
+                    else if (modifiers[x] == "%")
+                    {
+                        redIndices.Add(i + startingIndex);
                     }
                 }
             }
         }
 
         mD.jitterIndices = jitterIndices;
+
+        mD.colorIndices.Clear();
+        if (keyIndices.Count > 0)
+        {
+            mD.colorIndices.Add(keyIndices.ToArray());
+        }
+        else
+        {
+            mD.colorIndices.Add(null);
+        }
+        mD.sentence = finishedSentence;
+
+        if (redIndices.Count > 0)
+        {
+            mD.colorIndices.Add(redIndices.ToArray());
+        }
+        else
+        {
+            mD.colorIndices.Add(null);
+        }
+
         mD.sentence = finishedSentence;
 
         return mD;

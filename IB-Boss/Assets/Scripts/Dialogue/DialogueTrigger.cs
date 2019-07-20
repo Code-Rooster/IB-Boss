@@ -8,7 +8,6 @@ public class DialogueTrigger : MonoBehaviour
 {
     private DialogueManager dM;
     public Dialogue[] dialogue;
-    //public TextEffects[] tFX;
 
     public string name;
 

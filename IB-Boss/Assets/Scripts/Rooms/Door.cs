@@ -4,62 +4,66 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public Room room;
-    public Door linkedDoor;
     public PlayerMovement pM;
 
-    public Transform playerPoint;
+    public Transform enterPoint;
+    public Transform exitPoint;
+    public Transform point;
+
+    private BoxCollider2D entranceCol;
+    private BoxCollider2D exitCol;
 
     private GameObject player;
 
-    private bool enteredThisDoor;
+    public bool backLocked = false;
+    public bool frontLocked = false;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
 
         pM = player.GetComponent<PlayerMovement>();
+
+        entranceCol = this.transform.Find("Entrance").GetComponent<BoxCollider2D>();
+        exitCol = this.transform.Find("Exit").GetComponent<BoxCollider2D>();
+
+        if (backLocked)
+        {
+            exitCol.isTrigger = false;
+        }
+        if (frontLocked)
+        {
+            entranceCol.isTrigger = false;
+        }
     }
 
     private void Update()
     {
-        if (pM.canEnter == false)
+        if (point != null)
         {
-            if (player.transform.position != linkedDoor.playerPoint.position && enteredThisDoor == true)
+            if (player.transform.position != point.position)
             {
                 player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
                 pM.canMove = false;
 
-                player.transform.position = Vector3.Lerp(player.transform.position, linkedDoor.playerPoint.position, 0.1f);
+                player.transform.position = Vector3.Lerp(player.transform.position, point.position, 0.1f);
             }
 
-            if (Vector3.Distance(player.transform.position, linkedDoor.playerPoint.position) < 0.1 && enteredThisDoor == true)
+            if (Vector3.Distance(player.transform.position, point.position) < 0.1)
             {
-                enteredThisDoor = false;
+                point = null;
 
                 pM.canMove = true;
-                pM.canEnter = true;
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    public void Unlock()
     {
-        print("Collided");
+        print("... You unlocked the door!");
 
-        if (pM.canEnter)
-        {
-            print("Entered: " + this.gameObject.name);
-
-            if (col.tag == "Player")
-            {
-                room.LoadRooms();
-
-                enteredThisDoor = true;
-
-                pM.canEnter = false;
-            }
-        }
+        entranceCol.isTrigger = true;
+        exitCol.isTrigger = true;
     }
 }

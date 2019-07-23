@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 7cc3f916b948d0346afea71c893e521c
+guid: 09cb60d800dc27142a15ffefb6cbdd7f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2275950512432236774
-    second: BackDoor1_0
+      213: -2542593004536558229
+    second: HalfBackWall_0
   - first:
-      213: -9002129997813157658
-    second: BackDoor1_1
+      213: -9136832966432532584
+    second: HalfBackWall_1
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -116,12 +116,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BackDoor1_0
+      name: HalfBackWall_0
       rect:
         serializedVersion: 2
         x: 0
         y: 32
-        width: 32
+        width: 16
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -130,19 +130,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4f56dbd15ed59c43b302eb2f7165032
-      internalID: -2275950512432236774
+      spriteID: 4a69535f6b5d9854b866b7023e29040c
+      internalID: -2542593004536558229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BackDoor1_1
+      name: HalfBackWall_1
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
+        width: 16
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -151,8 +151,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9de8db1840f2cd04d84ec8ce1ef5b506
-      internalID: -9002129997813157658
+      spriteID: f8e79afb83795ce4189831fc7e424aea
+      internalID: -9136832966432532584
       vertices: []
       indices: 
       edges: []

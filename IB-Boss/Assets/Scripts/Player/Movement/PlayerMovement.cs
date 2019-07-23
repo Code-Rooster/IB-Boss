@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
 
     public bool canMove = true;
-    public bool canEnter = true;
 
     void Start()
     {

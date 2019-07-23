@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SmartCam : MonoBehaviour
 {
-    public Room room;
+    //public Room room;
 
     public Transform target;
 
@@ -23,16 +23,10 @@ public class SmartCam : MonoBehaviour
 
         if (lockCam)
         {
-            dampVec.x = Mathf.Clamp(dampVec.x, room.camLims[0].position.x, room.camLims[1].position.x);
-            dampVec.y = Mathf.Clamp(dampVec.y, room.camLims[0].position.y, room.camLims[1].position.y);
+            //dampVec.x = Mathf.Clamp(dampVec.x, room.camLims[0].position.x, room.camLims[1].position.x);
+            //dampVec.y = Mathf.Clamp(dampVec.y, room.camLims[0].position.y, room.camLims[1].position.y);
         }
 
         transform.position = dampVec;
-    }
-
-    public void SwitchRoom(Room newRoom)
-    {
-        room = newRoom;
-        lockCam = false;
     }
 }

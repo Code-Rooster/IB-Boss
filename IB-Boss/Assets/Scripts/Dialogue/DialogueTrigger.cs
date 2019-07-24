@@ -24,7 +24,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         dM = GameObject.FindGameObjectWithTag("DM").GetComponent<DialogueManager>();
 
-        lines = File.ReadAllLines(@"C:\Users\codin\Desktop\IB-Boss\IB-Boss\Assets\Dialogue\Characters\TestDialogue.txt");
+        lines = File.ReadAllLines(@"C:\Users\codin\Desktop\IB-Boss\IB-Boss\Assets\Dialogue\Characters\" + this.gameObject.name + ".txt");
 
         int dialogueCount = 0;
         int dialogueDepth = 0;
@@ -44,6 +44,7 @@ public class DialogueTrigger : MonoBehaviour
             else
             {
                 dialogueCount++;
+                dialogueDepth = 0;
             }
         }
     }
@@ -102,20 +103,12 @@ public class DialogueTrigger : MonoBehaviour
 
                 int.TryParse(toParse.ToString(), out dialogue[dialogueIndex].triggerIndex);
 
-                print("Trigger Index: " + toParse);
-
-                print(dialogues[dialogueIndex][0]);
-
                 dialogues[dialogueIndex][0] = firstDialogue.Replace("{TD}", "");
                 dialogues[dialogueIndex][0] = dialogues[dialogueIndex][0].Replace("(" + toParse + ")", "");
                 dialogues[dialogueIndex][0] = dialogues[dialogueIndex][0].Replace("[" + dialogue[dialogueIndex].triggerName + "]", "");
-
-                print(dialogues[dialogueIndex][0]);
             }
             else
             {
-                print(dialogue[dialogueIndex]);
-
                 dialogue[dialogueIndex].endCondition = Dialogue.EndCondtion.Nothing;
             }
 

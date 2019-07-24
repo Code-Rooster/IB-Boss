@@ -11,6 +11,7 @@ TagManager:
   - HorizontalWall
   - VerticalWall
   - Manager
+  - Character
   layers:
   - Default
   - TransparentFX

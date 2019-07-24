@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 395127994105970753}
   m_Layer: 0
   m_Name: CharacterController
-  m_TagString: Player
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -337,13 +337,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9940ac890c8da9541903e7f472176889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue:
-  - dT: {fileID: 0}
-    triggerIndex: 0
-    endCondition: 0
-    sentences:
-    - 
   name: Character
+  lines:
+  - This is a test!
+  - This is still the same dialogue as before.
+  - '|'
+  - This is new dialogue.
+  - Huzzah!
   dialogueIndex: 0
 --- !u!1 &395127994227956214
 GameObject:

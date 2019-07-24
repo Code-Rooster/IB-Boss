@@ -36,7 +36,9 @@ public class JitterEffect : MonoBehaviour
     {
         //If the text has just changed notify the rest of the script
         if (obj == dM.dialogueText)
+        {
             hasTextChanged = true;
+        }
     }
 
     public IEnumerator TextJitter(int[] jitterIndices)
@@ -60,7 +62,7 @@ public class JitterEffect : MonoBehaviour
 
         while (true)
         {
-            if (!cE.isColoring)
+            if (!cE.isColoring && !hasTextChanged)
             {
                 dM.dialogueText.ForceMeshUpdate(true);
             }
@@ -162,6 +164,7 @@ public class JitterEffect : MonoBehaviour
                     }
                 }
             }
+
             for (int i = 0; i < dM.dialogueText.textInfo.meshInfo.Length; i++)
             {
                 dM.dialogueText.textInfo.meshInfo[i].mesh.vertices = dM.dialogueText.textInfo.meshInfo[i].vertices;
@@ -170,8 +173,7 @@ public class JitterEffect : MonoBehaviour
 
             loopCount += 1;
 
-            yield return new WaitForSeconds(0.1f);
-
+            yield return new WaitForSeconds(SpeedMultiplier);
         }
     }
 }

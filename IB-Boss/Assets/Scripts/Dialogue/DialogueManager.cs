@@ -6,7 +6,7 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
-    private Dialogue dialogue;
+    private Dialogue D;
     private DialogueTrigger dT;
     private ConditionDetection cD;
     public ModifiedDialogue mD;
@@ -42,10 +42,10 @@ public class DialogueManager : MonoBehaviour
         cE = this.gameObject.GetComponent<ColorEffect>();
     }
 
-    public void StartDialogue(Dialogue d, string name, DialogueTrigger DT)
+    public void StartDialogue(Dialogue d, string[] dialogue, string name, DialogueTrigger DT)
     {
-        dialogue = d;
         dT = DT;
+        D = d;
 
         nameText.text = name;
 
@@ -55,10 +55,13 @@ public class DialogueManager : MonoBehaviour
         startedDialogue = true;
         sentenceCount = -1;
 
-        foreach (string sentence in dialogue.sentences)
+        foreach (string sentence in dialogue)
         {
-            //Queue up every sentence
-            sentences.Enqueue(sentence);
+            if (sentence != null)
+            {
+                //Queue up every sentence
+                sentences.Enqueue(sentence);
+            }
         }
 
         //Make all of the characters invisible
@@ -107,15 +110,15 @@ public class DialogueManager : MonoBehaviour
         //Make all of the characters invisible
         dialogueText.maxVisibleCharacters = 0;
 
-        if (mD.jitterIndices.Count > 0)
-        {
-            StartCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
-        }
-
         //Iterate through every character in the sentence
         for (int i = 0; i < currentSentence.ToCharArray().Length; i++)
         {
             StopCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
+
+            if (mD.jitterIndices.Count > 0)
+            {
+                StartCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
+            }
 
             //Make the current character visible
             dialogueText.maxVisibleCharacters += 1;
@@ -166,7 +169,7 @@ public class DialogueManager : MonoBehaviour
 
         startedDialogue = false;
 
-        switch (dialogue.endCondition)
+        switch (D.endCondition)
         {
             case Dialogue.EndCondtion.NextDialogue:
                 dialogueAnim.Play("CloseDialogue");
@@ -174,10 +177,13 @@ public class DialogueManager : MonoBehaviour
                 break;
             case Dialogue.EndCondtion.TriggerDialogue:
                 dT.dialogueIndex++;
-                dialogue.dT.dialogueIndex = dialogue.triggerIndex;
-                dialogue.dT.TriggerDialogue();
+                GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>().dialogueIndex = D.triggerIndex;
+                GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>().TriggerDialogue();
                 break;
             case Dialogue.EndCondtion.Nothing:
+                dialogueAnim.Play("CloseDialogue");
+                break;
+            default:
                 dialogueAnim.Play("CloseDialogue");
                 break;
         }

@@ -22,46 +22,50 @@ public class ConditionDetection : MonoBehaviour
         for (int x = 0; x < modifiers.Length; x++)
         {
         List<string> modWords = new List<string>();
-
-            if (sentence.Contains(modifiers[x]))
+            if (sentence != null)
             {
-                modWords.Clear();
-
-                int startingIndex = 0;
-
-                string[] sentenceWords = sentence.Replace(modifiers[x], "").Split(' ');
-
-                finishedSentence = finishedSentence.Replace(modifiers[x], "");
-
-                MatchCollection modMatches = modReges[x].Matches(sentence);
-
-                startingIndex = System.Array.IndexOf(sentence.Split(' '), modMatches[0].Value.Split(' ')[0]);
-
-                for (int i = 0; i < modMatches.Count; i++)
+                if (sentence.Contains(modifiers[x]))
                 {
-                    foreach (string word in modMatches[i].Value.Split(' '))
-                    {
-                        modWords.Add(word.Replace(modifiers[x], ""));
-                    }
-                }
+                    modWords.Clear();
 
-                for (int i = 0; i < modWords.Count; i++)
-                {
-                    if (modifiers[x] == "~")
+                    int startingIndex = 0;
+
+                    string[] sentenceWords = sentence.Replace(modifiers[x], "").Split(' ');
+
+                    finishedSentence = finishedSentence.Replace(modifiers[x], "");
+
+                    MatchCollection modMatches = modReges[x].Matches(sentence);
+
+                    for (int y = 0; y < modMatches.Count; y++)
                     {
-                        jitterIndices.Add(i + startingIndex);
-                    }
-                    else if (modifiers[x] == "#")
-                    {
-                        keyIndices.Add(i + startingIndex);
-                    }
-                    else if (modifiers[x] == "%")
-                    {
-                        redIndices.Add(i + startingIndex);
+                        startingIndex = System.Array.IndexOf(sentence.Split(' '), modMatches[y].Value.Split(' ')[0]);
+
+                        foreach (string word in modMatches[y].Value.Split(' '))
+                        {
+                            modWords.Add(word.Replace(modifiers[x], ""));
+                        }
+
+                        for (int i = 0; i < modWords.Count; i++)
+                        {
+                            if (modifiers[x] == "~")
+                            {
+                                jitterIndices.Add(i + startingIndex);
+                            }
+                            else if (modifiers[x] == "#")
+                            {
+                                keyIndices.Add(i + startingIndex);
+                            }
+                            else if (modifiers[x] == "%")
+                            {
+                                redIndices.Add(i + startingIndex);
+                            }
+                        }
                     }
                 }
             }
         }
+
+        print(jitterIndices.Count);
 
         mD.jitterIndices = jitterIndices;
 

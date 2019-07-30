@@ -1,4 +1,0 @@
-{TD}[TestCharacter1](1)Hi! I'm test character 2!
-I live here, too!
-|
-Yeah, mine's TestCharacter2.

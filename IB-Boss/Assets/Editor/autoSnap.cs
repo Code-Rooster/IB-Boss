@@ -213,7 +213,7 @@ public class autoSnap : EditorWindow
 
     public void OnDisable()
     {
-        Debug.Log("AutoSnap: OnDisable");
+        //Debug.Log("AutoSnap: OnDisable");
 
         EditorPrefs.SetBool(doSnapKey, doSnap);
         EditorPrefs.SetBool(doScaleSnapKey, doScaleSnap);

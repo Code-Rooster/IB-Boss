@@ -1,7 +1,0 @@
-{TD}[TestCharacter2](0)Hi! I'm test character 1!
-Welcome to my humble abode.
-|
-{TD}[TestCharacter2](1)I can't wait to get to know you!
-...
-My real name?
-TestCharacter1 ~is~ my real name!

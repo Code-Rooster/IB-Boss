@@ -19,8 +19,14 @@ public class ColorEffect : MonoBehaviour
         dM = this.gameObject.GetComponent<DialogueManager>();
     }
 
-    public void ColorText(int[][] wordList)
+    public void ColorText()
     {
+        int[][] wordList = new int[][] {
+            new int[1]
+        };
+
+        wordList[0][0] = 0;
+
         dM.dialogueText.ForceMeshUpdate(true);
 
         isColoring = true;

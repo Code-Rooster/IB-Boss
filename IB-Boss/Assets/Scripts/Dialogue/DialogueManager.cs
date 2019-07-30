@@ -10,7 +10,9 @@ public class DialogueManager : MonoBehaviour
     private DialogueTrigger dT;
     private ConditionDetection cD;
     public ModifiedDialogue mD;
-    private JitterEffect jE;
+    //private JitterEffect jE;
+    //private WaveEffect wE;
+    private Effects fX;
     private ColorEffect cE;
 
     public DialogueBox dB;
@@ -28,7 +30,7 @@ public class DialogueManager : MonoBehaviour
     public int sentenceCount;
 
     public float typeSpeed = 0.02f;
-    public float jitterFactor;
+    public float jitterSpeed = 1.0f;
 
     public Animator dialogueAnim;
 
@@ -38,8 +40,10 @@ public class DialogueManager : MonoBehaviour
 
         dB = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<DialogueBox>();
         cD = this.gameObject.GetComponent<ConditionDetection>();
-        jE = this.gameObject.GetComponent<JitterEffect>();
+        //jE = this.gameObject.GetComponent<JitterEffect>();
+        //wE = this.gameObject.GetComponent<WaveEffect>();
         cE = this.gameObject.GetComponent<ColorEffect>();
+        fX = this.gameObject.GetComponent<Effects>();
     }
 
     public void StartDialogue(Dialogue d, string[] dialogue, string name, DialogueTrigger DT)
@@ -65,7 +69,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         //Make all of the characters invisible
-        dialogueText.maxVisibleCharacters = 0;
+        //dialogueText.maxVisibleCharacters = 0;
 
         DisplayNextSentence();
 
@@ -93,44 +97,11 @@ public class DialogueManager : MonoBehaviour
 
         mD = cD.FindMods(sentences.Dequeue());
 
-        //Set the current sentence to the first sentence in the queue
         currentSentence = mD.sentence;
 
-        StartCoroutine("TypeSentence");
-    }
-
-    IEnumerator TypeSentence()
-    {
-        yield return new WaitUntil(() => dB.isOpen);
-
-        isTyping = true;
         dialogueText.text = "";
-        dialogueText.text = currentSentence;
 
-        //Make all of the characters invisible
-        dialogueText.maxVisibleCharacters = 0;
-
-        //Iterate through every character in the sentence
-        for (int i = 0; i < currentSentence.ToCharArray().Length; i++)
-        {
-            StopCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
-
-            if (mD.jitterIndices.Count > 0)
-            {
-                StartCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
-            }
-
-            //Make the current character visible
-            dialogueText.maxVisibleCharacters += 1;
-
-            if (mD.colorIndices.Count > 0)
-            {
-                cE.ColorText(mD.colorIndices.ToArray());
-            }
-
-            yield return new WaitForSeconds(typeSpeed);
-        }
-        isTyping = false;
+        StartCoroutine(fX.ApplyEffects(currentSentence, true, mD.waveIndices.ToArray(), mD.jitterIndices.ToArray()));
     }
 
     public void SkipAhead()
@@ -142,27 +113,11 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
         dialogueText.text = currentSentence;
 
-        //Make all of the characters invisible
-        dialogueText.maxVisibleCharacters = 0;
-
-        //Make all of the characters visible
-        dialogueText.maxVisibleCharacters = currentSentence.ToCharArray().Length;
-
-        if (mD.colorIndices.Count > 0)
-        {
-            cE.ColorText(mD.colorIndices.ToArray());
-        }
-
-        if (mD.jitterIndices.Count > 0)
-        {
-            StartCoroutine(jE.TextJitter(mD.jitterIndices.ToArray()));
-        }
+        //StartCoroutine(fX.ApplyEffects(currentSentence, true, mD.waveIndices.ToArray(), mD.jitterIndices.ToArray()));
     }
 
     public void EndDialogue()
     {
-        //Make all of the characters invisible
-        dialogueText.maxVisibleCharacters = 0;
         dialogueText.text = "";
 
         StopAllCoroutines();

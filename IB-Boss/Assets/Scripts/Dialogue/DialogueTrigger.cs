@@ -24,14 +24,16 @@ public class DialogueTrigger : MonoBehaviour
     {
         dM = GameObject.FindGameObjectWithTag("DM").GetComponent<DialogueManager>();
 
-        lines = File.ReadAllLines(@"C:\Users\codin\Desktop\IB-Boss\IB-Boss\Assets\Dialogue\Characters\" + this.gameObject.name + ".txt");
+        TextAsset textFile = Resources.Load<TextAsset>("Dialogue/Characters/" + this.gameObject.name);
+
+        lines = textFile.text.Split('\n');
 
         int dialogueCount = 0;
         int dialogueDepth = 0;
 
         for (int i = 0; i < dialogues.Length; i++)
         {
-            dialogues[i] = new string[10];
+            dialogues[i] = new string[20];
         }
 
         for (int i = 0; i < lines.Length; i++)
@@ -69,7 +71,7 @@ public class DialogueTrigger : MonoBehaviour
             {
                 dialogue[dialogueIndex].endCondition = Dialogue.EndCondtion.NextDialogue;
 
-                dialogues[dialogueIndex][0].Replace("{ND}", "");
+                dialogues[dialogueIndex][0] = firstDialogue.Replace("{ND}", "");
             }
             else if (firstDialogue.Contains("{TD}"))
             {

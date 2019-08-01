@@ -9,18 +9,16 @@ public class DialogueManager : MonoBehaviour
     private Dialogue D;
     private DialogueTrigger dT;
     private ConditionDetection cD;
+    private QuestDetection qD;
     public ModifiedDialogue mD;
-    //private JitterEffect jE;
-    //private WaveEffect wE;
     private Effects fX;
-    private ColorEffect cE;
 
     public DialogueBox dB;
 
     private Queue<string> sentences;
 
-    public TMPro.TMP_Text dialogueText;
-    public TMPro.TMP_Text nameText;
+    public TMP_Text dialogueText;
+    public TMP_Text nameText;
 
     public string currentSentence;
 
@@ -39,10 +37,10 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
 
         dB = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<DialogueBox>();
+
+        qD = GameObject.FindGameObjectWithTag("QM").GetComponent<QuestDetection>();
+
         cD = this.gameObject.GetComponent<ConditionDetection>();
-        //jE = this.gameObject.GetComponent<JitterEffect>();
-        //wE = this.gameObject.GetComponent<WaveEffect>();
-        cE = this.gameObject.GetComponent<ColorEffect>();
         fX = this.gameObject.GetComponent<Effects>();
     }
 
@@ -53,7 +51,6 @@ public class DialogueManager : MonoBehaviour
 
         nameText.text = name;
 
-        //Clear the sentence queue
         sentences.Clear();
 
         startedDialogue = true;
@@ -63,57 +60,48 @@ public class DialogueManager : MonoBehaviour
         {
             if (sentence != null)
             {
-                //Queue up every sentence
                 sentences.Enqueue(sentence);
             }
         }
-
-        //Make all of the characters invisible
-        //dialogueText.maxVisibleCharacters = 0;
 
         DisplayNextSentence();
 
         if (!dB.isOpen)
         {
-            //Open the Dialogue Box
             dialogueAnim.Play("OpenDialogue");
         }
     }
 
     public void DisplayNextSentence()
     {
-        cE.isColoring = false;
-
         sentenceCount += 1;
 
         if (sentences.Count == 0)
         {
-            //If there's no more sentences just return out of the function after ending the dialogue
             EndDialogue();
             return;
         }
 
         StopAllCoroutines();
 
-        mD = cD.FindMods(sentences.Dequeue());
+        currentSentence = qD.FindQuests(sentences.Dequeue());
+
+        mD = cD.FindMods(currentSentence);
 
         currentSentence = mD.sentence;
 
-        dialogueText.text = "";
+        fX.type = true;
 
-        StartCoroutine(fX.ApplyEffects(currentSentence, true, mD.waveIndices.ToArray(), mD.jitterIndices.ToArray()));
+        StartCoroutine(fX.ApplyEffects(currentSentence, mD.colorIndices, mD.waveIndices.ToArray(), mD.jitterIndices.ToArray()));
     }
 
     public void SkipAhead()
     {
         //Stop typing
-        StopAllCoroutines();
-        isTyping = false;
+        fX.type = false;
 
         dialogueText.text = "";
         dialogueText.text = currentSentence;
-
-        //StartCoroutine(fX.ApplyEffects(currentSentence, true, mD.waveIndices.ToArray(), mD.jitterIndices.ToArray()));
     }
 
     public void EndDialogue()

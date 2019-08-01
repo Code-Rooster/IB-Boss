@@ -1,13 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class ConditionDetection : MonoBehaviour
 {
-    string[] modifiers = { "~", "#", "%", "=" };
-
-    Regex[] modReges = { new Regex(@"\~.*?\~"), new Regex(@"\#.*?#"), new Regex(@"\%.*?%"), new Regex(@"\=.*?=") };
+    string[] modifiers = { "<j>", "<w>", "<R>", "<M>", "<C>", "<K>" };
 
     public ModifiedDialogue FindMods(string sentence)
     {
@@ -15,86 +12,84 @@ public class ConditionDetection : MonoBehaviour
 
         string finishedSentence = sentence;
 
-        List<int> jitterIndices = new List<int>();
-        List<int> waveIndices = new List<int>();
-        List<int> keyIndices = new List<int>();
-        List<int> redIndices = new List<int>();
+        string[] words = sentence.Split(' ');
+
+        int firstIndex = -1;
+
+        List<char> lettersBetween = new List<char>();
+
+        for (int i = 0; i < 4; i++)
+        {
+            mD.colorIndices.Add(new List<int>());
+        }
 
         for (int x = 0; x < modifiers.Length; x++)
         {
-        List<string> modWords = new List<string>();
-            if (sentence != null)
+            for (int y = 0; y < words.Length; y++)
             {
-                if (sentence.Contains(modifiers[x]))
+                if (words[y].Contains(modifiers[x]))
                 {
-                    modWords.Clear();
-
-                    int startingIndex = 0;
-
-                    string[] sentenceWords = sentence.Replace(modifiers[x], "").Split(' ');
-
-                    finishedSentence = finishedSentence.Replace(modifiers[x], "");
-
-                    MatchCollection modMatches = modReges[x].Matches(sentence);
-
-                    for (int y = 0; y < modMatches.Count; y++)
+                    if (words[y].IndexOf(modifiers[x]) != words[y].LastIndexOf(modifiers[x]))
                     {
-                        startingIndex = System.Array.IndexOf(sentence.Split(' '), modMatches[y].Value.Split(' ')[0]);
+                        AddWord(mD, modifiers[x], y);
 
-                        foreach (string word in modMatches[y].Value.Split(' '))
+                        words[y].Replace(modifiers[x], "");
+                    }
+                    else
+                    {
+                        if (firstIndex == -1)
                         {
-                            modWords.Add(word.Replace(modifiers[x], ""));
+                            firstIndex = y;
                         }
-
-                        for (int i = 0; i < modWords.Count; i++)
+                        else
                         {
-                            if (modifiers[x] == "~")
+                            for (int z = firstIndex; z <= y; z++)
                             {
-                                jitterIndices.Add(i + startingIndex);
+                                AddWord(mD, modifiers[x], z);
                             }
-                            else if (modifiers[x] == "=")
-                            {
-                                waveIndices.Add(i + startingIndex);
-                            }
-                            else if (modifiers[x] == "#")
-                            {
-                                keyIndices.Add(i + startingIndex);
-                            }
-                            else if (modifiers[x] == "%")
-                            {
-                                redIndices.Add(i + startingIndex);
-                            }
+
+                            words[firstIndex].Replace(modifiers[x], "");
+                            words[y].Replace(modifiers[x], "");
+
+                            firstIndex = -1;
                         }
                     }
+
+                    finishedSentence = finishedSentence.Replace(modifiers[x], "");
                 }
             }
-        }
-
-        mD.jitterIndices = jitterIndices;
-        mD.waveIndices = waveIndices;
-
-        mD.colorIndices.Clear();
-        if (keyIndices.Count > 0)
-        {
-            mD.colorIndices.Add(keyIndices.ToArray());
-        }
-        else
-        {
-            mD.colorIndices.Add(null);
-        }
-        mD.sentence = finishedSentence;
-
-        if (redIndices.Count > 0)
-        {
-            mD.colorIndices.Add(redIndices.ToArray());
-        }
-        else
-        {
-            mD.colorIndices.Add(null);
         }
 
         mD.sentence = finishedSentence;
 
         return mD;
+    }
+
+    private void AddWord(ModifiedDialogue mD, string modifier, int index)
+    {
+        if (modifier == modifiers[0])
+        {
+            mD.jitterIndices.Add(index);
+        }
+        else if (modifier == modifiers[1])
+        {
+            mD.waveIndices.Add(index);
+        }
+        else if (modifier == modifiers[2])
+        {
+            mD.colorIndices[0].Add(index);
+        }
+        else if (modifier == modifiers[3])
+        {
+            mD.colorIndices[1].Add(index);
+        }
+        else if (modifier == modifiers[4])
+        {
+            mD.colorIndices[2].Add(index);
+        }
+        else if (modifier == modifiers[5])
+        {
+            mD.colorIndices[3].Add(index);
+        }
     }
 }

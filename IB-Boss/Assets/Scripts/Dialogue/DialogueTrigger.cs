@@ -63,7 +63,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         dialogue[dialogueIndex] = new Dialogue();
 
-        if (!dM.startedDialogue)
+        if (!dM.startedDialogue && !dM.isTyping)
         {
             string firstDialogue = dialogues[dialogueIndex][0];
 

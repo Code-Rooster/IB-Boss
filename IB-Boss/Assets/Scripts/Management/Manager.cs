@@ -6,6 +6,9 @@ public class Manager : MonoBehaviour
 {
     public GameObject CurrentRoom;
 
+    public bool canPause = true;
+    public bool isPaused = false;
+
     void Start()
     {
         Screen.fullScreen = false;
@@ -18,9 +21,20 @@ public class Manager : MonoBehaviour
             Screen.fullScreen = !Screen.fullScreen;
         }
 
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") && canPause)
         {
-            Application.Quit();
+            if (!isPaused)
+            {
+                isPaused = true;
+
+                Time.timeScale = 0;
+            }
+            else
+            {
+                isPaused = false;
+
+                Time.timeScale = 1;
+            }
         }
     }
 }

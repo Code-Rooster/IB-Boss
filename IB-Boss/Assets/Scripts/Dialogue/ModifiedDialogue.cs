@@ -8,9 +8,9 @@ public class ModifiedDialogue
     public List<int> jitterIndices = new List<int>();
     public List<int> waveIndices = new List<int>();
 
-    //0 = Key
-    //1 = Red
+    //0 = Red
+    //1 = Mechanic
     //2 = Character
-    //3 = Mechanic
-    public List<int[]> colorIndices = new List<int[]>();
+    //3 = Key
+    public List<List<int>> colorIndices = new List<List<int>>();
 }

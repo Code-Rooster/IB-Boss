@@ -12,6 +12,7 @@ TagManager:
   - VerticalWall
   - Manager
   - Character
+  - QM
   layers:
   - Default
   - TransparentFX

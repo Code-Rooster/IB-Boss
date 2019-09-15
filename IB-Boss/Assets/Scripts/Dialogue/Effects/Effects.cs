@@ -80,6 +80,7 @@ public class Effects : MonoBehaviour
             yield return new WaitUntil(() => dM.dB.isOpen);
 
             dM.isTyping = true;
+            dM.tdCheck = false;
 
             dM.dialogueText.text = sentence;
             dM.dialogueText.maxVisibleCharacters = sentence.ToCharArray().Length;
@@ -162,11 +163,6 @@ public class Effects : MonoBehaviour
                         typeVertexColors[typeVertexIndex + 3] = typeColor;
 
                         dM.dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
-
-                        if (currentCharTyping == 3)
-                        {
-                            print(sentence.ToCharArray()[currentCharTyping] + ": " + typeColor);
-                        }
                     }
                     else
                     {
@@ -185,6 +181,7 @@ public class Effects : MonoBehaviour
             if (currentCharTyping >= sentence.ToCharArray().Length)
             {
                 dM.isTyping = false;
+                dM.tdCheck = true;
 
                 type = false;
 
@@ -224,6 +221,7 @@ public class Effects : MonoBehaviour
                 if (dM.isTyping && !type)
                 {
                     dM.isTyping = false;
+                    dM.tdCheck = true;
 
                     ColorAllCharacters(255);
                 }

@@ -7,7 +7,7 @@ using TMPro;
 public class DialogueManager : MonoBehaviour
 {
     private Dialogue D;
-    private DialogueTrigger dT;
+    public DialogueTrigger dT;
     private ConditionDetection cD;
     private QuestDetection qD;
     public ModifiedDialogue mD;
@@ -15,17 +15,20 @@ public class DialogueManager : MonoBehaviour
 
     public DialogueBox dB;
 
-    private Queue<string> sentences;
+    public Queue<string> sentences;
 
     public TMP_Text dialogueText;
     public TMP_Text nameText;
 
     public string currentSentence;
+    public string dialogueName;
 
     public bool isTyping;
+    public bool tdCheck;
     public bool startedDialogue = false;
 
     public int sentenceCount;
+    public int sentencesLeft;
 
     public float typeSpeed = 0.02f;
     public float jitterSpeed = 1.0f;
@@ -49,12 +52,17 @@ public class DialogueManager : MonoBehaviour
         dT = DT;
         D = d;
 
+        startedDialogue = true;
+        tdCheck = false;
+        sentenceCount = 0;
+
+        print("Started Dialogue");
+
         nameText.text = name;
 
-        sentences.Clear();
+        dialogueName = name;
 
-        startedDialogue = true;
-        sentenceCount = -1;
+        sentences.Clear();
 
         foreach (string sentence in dialogue)
         {
@@ -74,13 +82,15 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        sentenceCount += 1;
+        sentencesLeft = sentences.Count;
 
-        if (sentences.Count == 0)
+        if (sentences.Count <= 0)
         {
             EndDialogue();
             return;
         }
+
+        sentenceCount++;
 
         StopAllCoroutines();
 
@@ -119,9 +129,14 @@ public class DialogueManager : MonoBehaviour
                 dT.dialogueIndex++;
                 break;
             case Dialogue.EndCondtion.TriggerDialogue:
-                dT.dialogueIndex++;
-                GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>().dialogueIndex = D.triggerIndex;
-                GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>().TriggerDialogue();
+                DialogueTrigger trigger = GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>();
+
+                sentenceCount = 0;
+
+                dialogueName = trigger.dialogueName;
+
+                trigger.dialogueIndex = D.triggerIndex;
+                trigger.TriggerDialogue();
                 break;
             case Dialogue.EndCondtion.Nothing:
                 dialogueAnim.Play("CloseDialogue");

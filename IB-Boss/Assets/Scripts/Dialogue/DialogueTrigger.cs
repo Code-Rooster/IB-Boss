@@ -12,7 +12,7 @@ public class DialogueTrigger : MonoBehaviour
     private DialogueManager dM;
     private Dialogue[] dialogue = new Dialogue[100];
 
-    public string name;
+    public string dialogueName;
     public string[] lines;
     public string[][] dialogues = new string[100][];
 
@@ -53,9 +53,19 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit") && canInteract)
+        if (Input.GetButtonDown("Submit"))
         {
-            TriggerDialogue();
+            if (canInteract && !dM.startedDialogue)
+            {
+                TriggerDialogue();
+            }
+            if (dM.startedDialogue)
+            {
+                if (dM.dialogueName == dialogueName)
+                {
+                    TriggerDialogue();
+                }
+            }
         }
     }
 
@@ -114,9 +124,9 @@ public class DialogueTrigger : MonoBehaviour
                 dialogue[dialogueIndex].endCondition = Dialogue.EndCondtion.Nothing;
             }
 
-            dM.StartDialogue(dialogue[dialogueIndex], dialogues[dialogueIndex], name, this);
+            dM.StartDialogue(dialogue[dialogueIndex], dialogues[dialogueIndex], dialogueName, this);
         }
-        else if (dM.startedDialogue && !dM.isTyping && dM.dB.isOpen)
+        else if (dM.startedDialogue && dM.tdCheck && dM.dB.isOpen)
         {
             dM.DisplayNextSentence();
         }

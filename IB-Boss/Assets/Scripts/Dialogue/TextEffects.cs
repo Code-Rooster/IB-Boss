@@ -192,7 +192,6 @@ public class TextEffects : MonoBehaviour
             loopCount += 1;
 
             yield return new WaitForSeconds(0.1f);
-
         }
     }
 }

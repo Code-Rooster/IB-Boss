@@ -1,4 +1,9 @@
-<SQ:Finish a dialogue!>I've <K>finally<K> finished the <w><C>dialogue system!<C><w>
-It took me <j>FOREVER<j> to finish,
-but I'm <w>REALLY<w> happy with how it turned out!
-<EQ:Finish a dialogue!>I also just finished the basics of the <C><w>quest system,<w><C> too!
+{TD}[Tutorial Steve](0)<w>ONE!<w>
+TWO!
+<j>THREE!<j>
+|
+{TD}[Tutorial Steve](1)SIX!
+SEVEEEEN!
+|
+TEN!
+ELEVEN!

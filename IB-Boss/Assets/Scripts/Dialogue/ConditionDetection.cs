@@ -12,33 +12,44 @@ public class ConditionDetection : MonoBehaviour
 
         string finishedSentence = sentence;
 
+        //Make an array of strings from the initial sentence
         string[] words = sentence.Split(' ');
 
         int firstIndex = -1;
 
+        //Create a new list that represents the characters in between the modifiers
         List<char> lettersBetween = new List<char>();
 
+        //For each color create a new list
         for (int i = 0; i < 4; i++)
         {
             mD.colorIndices.Add(new List<int>());
         }
 
+        //For every modifier
         for (int x = 0; x < modifiers.Length; x++)
         {
+            //For every word
             for (int y = 0; y < words.Length; y++)
             {
+                //If the word contains a modifier
                 if (words[y].Contains(modifiers[x]))
                 {
+                    //If two identical modifiers are on the same word
                     if (words[y].IndexOf(modifiers[x]) != words[y].LastIndexOf(modifiers[x]))
                     {
+                        //Add the word to the list
                         AddWord(mD, modifiers[x], y);
 
+                        //Replace all of the modifiers
                         words[y].Replace(modifiers[x], "");
                     }
                     else
                     {
+                        //If there is no defined first index yet
                         if (firstIndex == -1)
                         {
+                            //Set it to y
                             firstIndex = y;
                         }
                         else

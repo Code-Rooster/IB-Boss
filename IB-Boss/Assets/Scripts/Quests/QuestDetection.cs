@@ -38,8 +38,6 @@ public class QuestDetection : MonoBehaviour
                 {
                     if (qM.quests[y].questName == questName)
                     {
-                        print("Found Quest: " + questName);
-
                         qM.StartQuest(qM.quests[y]);
                     }
                 }

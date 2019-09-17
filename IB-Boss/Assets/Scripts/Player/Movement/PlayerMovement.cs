@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
 
     public bool canMove = true;
+    private bool resetSpeed = false;
 
     void Start()
     {
@@ -41,6 +42,14 @@ public class PlayerMovement : MonoBehaviour
 
             anim.SetFloat("xMovement", movement.x);
             anim.SetFloat("yMovement", movement.y);
+
+            resetSpeed = false;
+        }
+        else if (!canMove && !resetSpeed)
+        {
+            rb.velocity = Vector2.zero;
+
+            resetSpeed = true;
         }
     }
 }

@@ -1,9 +1,8 @@
-{TD}[Tutorial Steve](0)<w>ONE!<w>
-TWO!
-<j>THREE!<j>
+{TD}[Player](0)<w>WELL HELLOOOOOOO THERE!<w>
+<w>Howya doin' kid?<w>
+<j>Good! Good. Listen, I've got a little favor for ya!<w>
 |
-{TD}[Tutorial Steve](1)SIX!
-SEVEEEEN!
-|
-TEN!
-ELEVEN!
+Eh. Nothin' to worry about. Not <w>now,<w> anyway!
+You've no doubt noticed that it's a little... <j>dark...<j> in here.
+Nothing a little <w>ELBOW GREASE<w> can't fix!
+Alright kiddo, I want <w>you<w> to go find a... A light switch or something.

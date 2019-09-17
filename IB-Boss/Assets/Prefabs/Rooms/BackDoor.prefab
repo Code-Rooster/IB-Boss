@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 4216188654984458829}
   - component: {fileID: 8046649035002345211}
   - component: {fileID: -6292299872612629363}
+  - component: {fileID: 8119261940302430643}
   m_Layer: 0
   m_Name: BackDoor
   m_TagString: Untagged
@@ -176,7 +177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2306290833388645274}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -256,6 +257,19 @@ MonoBehaviour:
   point: {fileID: 0}
   backLocked: 0
   frontLocked: 0
+--- !u!114 &8119261940302430643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306290833388645274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7f721e97785b84b979dfe22c421488, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentName: 4
 --- !u!1 &2531393102902602236
 GameObject:
   m_ObjectHideFlags: 0

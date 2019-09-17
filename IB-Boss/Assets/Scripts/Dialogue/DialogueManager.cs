@@ -56,8 +56,6 @@ public class DialogueManager : MonoBehaviour
         tdCheck = false;
         sentenceCount = 0;
 
-        print("Started Dialogue");
-
         nameText.text = name;
 
         dialogueName = name;

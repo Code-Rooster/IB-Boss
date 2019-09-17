@@ -103,6 +103,7 @@ public class Effects : MonoBehaviour
                 if (currentCharTyping > 0)
                 {
                     char lastCharTyped = sentence.ToCharArray()[currentCharTyping - 1];
+                    char thisChar = sentence.ToCharArray()[currentCharTyping];
 
                     if (lastCharTyped != '.' || lastCharTyped != ',' || lastCharTyped != '?' || lastCharTyped != '!')
                     {

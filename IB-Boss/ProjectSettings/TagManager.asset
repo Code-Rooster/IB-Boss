@@ -13,6 +13,7 @@ TagManager:
   - Manager
   - Character
   - QM
+  - KeyHUD
   layers:
   - Default
   - TransparentFX

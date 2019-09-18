@@ -5,16 +5,14 @@ using TMPro;
 
 public class KeyHUD : MonoBehaviour
 {
-    public int bronzeCount;
-    public int silverCount;
-    public int goldCount;
-
     public List<TMPro.TMP_Text> keyCounts = new List<TMP_Text>();
 
-    public enum keyType { BronzeKey, SilverKey, GoldKey };
+    private KeyManager kM;
 
     private void Start()
     {
+        kM = this.gameObject.GetComponent<KeyManager>();
+
         for (int i = 0; i < GameObject.FindGameObjectsWithTag("KeyHUD").Length; i++)
         {
             keyCounts.Add(GameObject.FindGameObjectsWithTag("KeyHUD")[i].GetComponentInChildren<TMPro.TMP_Text>());
@@ -27,107 +25,56 @@ public class KeyHUD : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            CollectKey(keyType.BronzeKey);
+            kM.CollectKey(KeyManager.keyType.BronzeKey);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            CollectKey(keyType.SilverKey);
+            kM.CollectKey(KeyManager.keyType.SilverKey);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            CollectKey(keyType.GoldKey);
+            kM.CollectKey(KeyManager.keyType.GoldKey);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            RemoveKey(keyType.BronzeKey);
+            kM.RemoveKey(KeyManager.keyType.BronzeKey);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            RemoveKey(keyType.SilverKey);
+            kM.RemoveKey(KeyManager.keyType.SilverKey);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            RemoveKey(keyType.GoldKey);
+            kM.RemoveKey(KeyManager.keyType.GoldKey);
         }
     }
 
-    public void CollectKey(keyType kT)
+    public void UpdateKeyHUD(int bC, int sC, int gC)
     {
-        switch (kT)
+        if (bC != 0)
         {
-            case (keyType.BronzeKey):
-                bronzeCount++;
-                break;
-            case (keyType.SilverKey):
-                silverCount++;
-                break;
-            case (keyType.GoldKey):
-                goldCount++;
-                break;
-        }
-
-        UpdateKeyHUD();
-    }
-
-    public void RemoveKey(keyType kT)
-    {
-        switch (kT)
-        {
-            case (keyType.BronzeKey):
-                if (bronzeCount > 0)
-                {
-                    bronzeCount--;
-                }
-                break;
-            case (keyType.SilverKey):
-                if (silverCount > 0)
-                {
-                    silverCount--;
-                }
-                break;
-            case (keyType.GoldKey):
-                if (silverCount > 0)
-                {
-                    goldCount--;
-                }
-                break;
-        }
-
-        UpdateKeyHUD();
-    }
-
-    private void UpdateKeyHUD()
-    {
-        if (bronzeCount != 0)
-        {
-            keyCounts[0].text = "<sprite=0> x" + bronzeCount;
+            keyCounts[0].text = "<sprite=0> x" + bC;
         }
         else
         {
             keyCounts[0].text = "";
         }
-        if (silverCount != 0)
+
+        if (sC != 0)
         {
-            if (keyCounts[0].text == "")
+            if (bC == 0)
             {
-                keyCounts[0].text = "<sprite=1> x" + silverCount;
+                keyCounts[0].text = "<sprite=1> x" + sC;
             }
             else
             {
-                if (goldCount != 0 && bronzeCount == 0)
-                {
-                    keyCounts[0].text = "<sprite=1> x" + silverCount;
-                }
-                else
-                {
-                    keyCounts[1].text = "<sprite=1> x" + silverCount;
-                }
+                keyCounts[1].text = "<sprite=1> x" + sC;
             }
         }
         else
         {
-            if (bronzeCount == 0)
+            if (bC == 0)
             {
                 keyCounts[0].text = "";
             }
@@ -136,29 +83,31 @@ public class KeyHUD : MonoBehaviour
                 keyCounts[1].text = "";
             }
         }
-        if (goldCount != 0)
+        if (gC != 0)
         {
-            if (keyCounts[0].text == "")
+            if (bC != 0 && sC != 0)
             {
-                keyCounts[0].text = "<sprite=2> x" + goldCount;
+                keyCounts[2].text = "<sprite=2> x" + gC;
             }
-            else if (keyCounts[1].text == "")
+            else if (bC != 0 || sC != 0)
             {
-                keyCounts[1].text = "<sprite=2> x" + goldCount;
+                keyCounts[1].text = "<sprite=2> x" + gC;
+                keyCounts[2].text = "";
             }
             else
             {
-                keyCounts[2].text = "<sprite=2> x" + goldCount;
+                keyCounts[0].text = "<sprite=2> x" + gC;
             }
         }
         else
         {
-            if (bronzeCount == 0 && silverCount == 0)
+            if (bC == 0 && sC == 0)
             {
                 keyCounts[0].text = "";
             }
-            else if (bronzeCount == 0 || silverCount == 0)
+            else if (bC == 0 || sC == 0)
             {
+                keyCounts[1].text = "";
                 keyCounts[1].text = "";
             }
             else

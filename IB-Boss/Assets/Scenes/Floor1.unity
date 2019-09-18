@@ -13349,6 +13349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1395905398}
   - component: {fileID: 1395905399}
+  - component: {fileID: 1395905400}
   m_Layer: 0
   m_Name: HUDManager
   m_TagString: Untagged
@@ -13382,10 +13383,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0070d71a2699f7146ae3ce176d008a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyCounts: []
+--- !u!114 &1395905400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395905397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd5e92104089f141b00f86156b1c1af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   bronzeCount: 0
   silverCount: 0
   goldCount: 0
-  keyCounts: []
 --- !u!1001 &1397129208
 PrefabInstance:
   m_ObjectHideFlags: 0

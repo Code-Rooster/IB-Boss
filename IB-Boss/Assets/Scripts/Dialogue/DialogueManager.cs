@@ -12,6 +12,7 @@ public class DialogueManager : MonoBehaviour
     private QuestDetection qD;
     public ModifiedDialogue mD;
     private Effects fX;
+    public PlayerMovement pM;
 
     public DialogueBox dB;
 
@@ -51,6 +52,8 @@ public class DialogueManager : MonoBehaviour
     {
         dT = DT;
         D = d;
+
+        pM.canMove = false;
 
         startedDialogue = true;
         tdCheck = false;
@@ -125,6 +128,9 @@ public class DialogueManager : MonoBehaviour
             case Dialogue.EndCondtion.NextDialogue:
                 dialogueAnim.Play("CloseDialogue");
                 dT.dialogueIndex++;
+
+                pM.canMove = true;
+
                 break;
             case Dialogue.EndCondtion.TriggerDialogue:
                 DialogueTrigger trigger = GameObject.Find(D.triggerName).GetComponent<DialogueTrigger>();
@@ -138,9 +144,15 @@ public class DialogueManager : MonoBehaviour
                 break;
             case Dialogue.EndCondtion.Nothing:
                 dialogueAnim.Play("CloseDialogue");
+
+                pM.canMove = true;
+
                 break;
             default:
                 dialogueAnim.Play("CloseDialogue");
+
+                pM.canMove = true;
+
                 break;
         }
     }

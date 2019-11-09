@@ -23,31 +23,31 @@ public class KeyHUD : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            kM.CollectKey(KeyManager.keyType.BronzeKey);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            kM.CollectKey(KeyManager.keyType.SilverKey);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            kM.CollectKey(KeyManager.keyType.GoldKey);
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    kM.CollectKey(KeyManager.keyType.BronzeKey);
+        //}
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    kM.CollectKey(KeyManager.keyType.SilverKey);
+        //}
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    kM.CollectKey(KeyManager.keyType.GoldKey);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            kM.RemoveKey(KeyManager.keyType.BronzeKey);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            kM.RemoveKey(KeyManager.keyType.SilverKey);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            kM.RemoveKey(KeyManager.keyType.GoldKey);
-        }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    kM.RemoveKey(KeyManager.keyType.BronzeKey);
+        //}
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    kM.RemoveKey(KeyManager.keyType.SilverKey);
+        //}
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    kM.RemoveKey(KeyManager.keyType.GoldKey);
+        //}
     }
 
     public void UpdateKeyHUD(int bC, int sC, int gC)

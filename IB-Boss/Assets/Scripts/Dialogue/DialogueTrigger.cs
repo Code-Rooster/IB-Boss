@@ -24,7 +24,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         dM = GameObject.FindGameObjectWithTag("DM").GetComponent<DialogueManager>();
 
-        TextAsset textFile = Resources.Load<TextAsset>("Dialogue/Characters/" + this.gameObject.name);
+        TextAsset textFile = Resources.Load<TextAsset>("Dialogue/Characters/" + dialogueName);
 
         lines = textFile.text.Split('\n');
 
@@ -55,16 +55,9 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (Input.GetButtonDown("Submit"))
         {
-            if (canInteract && !dM.startedDialogue)
+            if (canInteract)
             {
                 TriggerDialogue();
-            }
-            if (dM.startedDialogue)
-            {
-                if (dM.dialogueName == dialogueName)
-                {
-                    TriggerDialogue();
-                }
             }
         }
     }

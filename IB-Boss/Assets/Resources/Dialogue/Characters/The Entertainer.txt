@@ -1,4 +1,4 @@
-{TD}[Player](0)<w>WELL HELLOOOOOOO THERE!<w>
+{TD}[Player](0)<w>WELL <B>HELLOOOOOOO<B> THERE!<w>
 <w>Howya doin' kid?<w>
 <j>Good! Good. Listen, I've got a little favor for ya!<w>
 |

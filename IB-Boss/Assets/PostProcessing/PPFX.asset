@@ -118,7 +118,7 @@ MonoBehaviour:
     value: 0
   contrast:
     overrideState: 1
-    value: -2
+    value: 13
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1422,7 +1422,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 4
+    value: 11
   threshold:
     overrideState: 0
     value: 1

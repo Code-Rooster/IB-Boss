@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5009315132570669470}
   - component: {fileID: 6904451199807836337}
+  - component: {fileID: 1818028432771476007}
   m_Layer: 0
   m_Name: CeilingLight
   m_TagString: Untagged
@@ -91,3 +92,19 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1818028432771476007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273196533549543714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac80f8767d6b6f6408479d886635b471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxReduction: 0.2
+  maxIncrease: 0.2
+  rateDamping: 0.1
+  strength: 15

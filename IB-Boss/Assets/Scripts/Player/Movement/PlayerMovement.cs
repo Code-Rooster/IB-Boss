@@ -1,28 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Vector2 movement;
-
     public float speed;
     public float boostSpeed;
-    public float boostTimer;
-    public float timeTilBoost;
-    public float maxBoostTimer;
-    public float boostWaitTime;
+
+    public Vector2 movement;
 
     public bool isMoving;
-    public bool canBoost = true;
+    public bool canMove = true;
     public bool isBoosting = false;
+    private bool resetSpeed = false;
 
     public Rigidbody2D rb;
 
     public Animator anim;
-
-    public bool canMove = true;
-    private bool resetSpeed = false;
 
     void Start()
     {
@@ -52,17 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
             resetSpeed = false;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                print("Space Pressed");
-                if (canBoost)
-                {
-                    print("Boost Initiated");
-                    canBoost = false;
-                    isBoosting = true;
-                    boostTimer = 0;
-                }
-            }
+            
         }
         else if (!canMove && !resetSpeed)
         {
@@ -73,44 +58,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (isBoosting)
         {
-            boostTimer += Time.fixedUnscaledDeltaTime;
-
-            if (canBoost)
+            if (rb.velocity.x == 0 && rb.velocity.y != 0)
             {
-                Debug.LogError("CanBoost while boosting");
+                rb.velocity = new Vector3(rb.velocity.x, (rb.velocity.y / Mathf.Abs(rb.velocity.y)) * (Mathf.Sqrt(2) * boostSpeed), 0);
             }
-
-            if (boostTimer <= maxBoostTimer)
+            else if (rb.velocity.x != 0 && rb.velocity.y == 0)
             {
-                if (rb.velocity.x == 0 && rb.velocity.y != 0)
-                {
-                    rb.velocity = new Vector3(rb.velocity.x, (rb.velocity.y / Mathf.Abs(rb.velocity.y)) * (Mathf.Sqrt(2) * boostSpeed), 0);
-                }
-                else if (rb.velocity.x != 0 && rb.velocity.y == 0)
-                {
-                    rb.velocity = new Vector3((rb.velocity.x / Mathf.Abs(rb.velocity.x)) * (Mathf.Sqrt(2) * boostSpeed), rb.velocity.y, 0);
-                }
-                else
-                {
-                    rb.velocity = new Vector3((rb.velocity.x / Mathf.Abs(rb.velocity.x)) * boostSpeed, (rb.velocity.y / Mathf.Abs(rb.velocity.y)) * boostSpeed, 0);
-                }
+                rb.velocity = new Vector3((rb.velocity.x / Mathf.Abs(rb.velocity.x)) * (Mathf.Sqrt(2) * boostSpeed), rb.velocity.y, 0);
             }
-
-            else
+            else if (rb.velocity.x != 0 || rb.velocity.y != 0)
             {
-                isBoosting = false;
-                canBoost = false;
-                timeTilBoost = 0;
+                rb.velocity = new Vector3((rb.velocity.x / Mathf.Abs(rb.velocity.x)) * boostSpeed, (rb.velocity.y / Mathf.Abs(rb.velocity.y)) * boostSpeed, 0);
             }
-        }
-
-        if (timeTilBoost <= boostWaitTime && !isBoosting)
-        {
-            timeTilBoost += Time.fixedDeltaTime;
-        }
-        else if (timeTilBoost > boostWaitTime && !isBoosting)
-        {
-            canBoost = true;
         }
     }
 }

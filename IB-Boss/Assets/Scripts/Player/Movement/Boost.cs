@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using EZCameraShake;
+//using EZCameraShake;
 
 public class Boost : MonoBehaviour
 {
     public PlayerMovement pM;
+    private CameraShake camShake;
 
     private Rigidbody2D rb;
 
@@ -31,6 +32,8 @@ public class Boost : MonoBehaviour
         pM = this.gameObject.GetComponent<PlayerMovement>();
 
         rb = this.gameObject.GetComponent<Rigidbody2D>();
+
+        camShake = Camera.main.GetComponent<CameraShake>();
     }
 
     private void FixedUpdate()
@@ -48,7 +51,7 @@ public class Boost : MonoBehaviour
             dashBar.color = new Color32(255, 0, 0, 112);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canBoost && pM.isMoving)
+        if (Input.GetKeyDown(KeyCode.Space) && canBoost)
         {
             pM.isBoosting = true;
             canBoost = false;
@@ -56,7 +59,7 @@ public class Boost : MonoBehaviour
             boostTimer = 0;
 
             boostParticles.Play();
-            CameraShaker.Instance.ShakeOnce(boostCamMagnitude, boostCamRoughness, boostCamFadeInTime, boostCamFadeOutTime);
+            camShake.StartCoroutine(camShake.ShakeCam(10, 5, 0.05f));
         }
 
         if (pM.isBoosting)

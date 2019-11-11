@@ -4,101 +4,148 @@ using UnityEngine;
 
 public class Telekinesis : MonoBehaviour
 {
-    private Vector3 mousePos;
-    private Vector3 lastPos;
+    public Transform inOrbit;
+    public GameObject selected;
 
-    public float lerpSpeed;
-    public float attackSpeed;
+    public float maxRadius;
+    public float maxAcceleration;
+    public float minAcceleration;
+    public float accelerationMult;
 
-    public Color32 highlightColor;
-    public Color32 activeColor;
+    private float orbitAcceleration;
+    private float directionMult;
 
-    public GameObject hoveringOver;
-    
-    public Rigidbody2D rb;
+    public List<GameObject> grabable = new List<GameObject>();
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
+    public Vector3 mousePos;
+    public Vector3 dir;
 
-        lastPos = transform.position;
-    }
+    RaycastHit2D lastHit;
+
+    public LayerMask orbitLayers;
+
+    public bool canGrab = true;
 
     void Update()
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
 
-        mousePos.z = -1;
+        Debug.DrawRay(transform.position, mousePos - transform.position);
 
-        transform.position = Vector3.Lerp(transform.position, mousePos, lerpSpeed);
-
-        Vector3 posDiff = transform.position - lastPos;
-
-        //print(posDiff);
-
-        if (hoveringOver != null)
+        if (canGrab)
         {
-            hoveringOver.transform.position = transform.position;
+            dir = (mousePos - transform.position);
 
-            if (Input.GetMouseButtonUp(0))
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 10, orbitLayers);
+
+            if (lastHit.collider != null && hit.collider != lastHit.collider)
             {
-                hoveringOver.transform.Find("Light").GetComponent<Light>().color = highlightColor;
+                lastHit.collider.gameObject.GetComponent<Grabable>().beingSelected = false;
+            }
 
-                hoveringOver = null;
+            if (hit.collider != null && grabable.Contains(hit.collider.gameObject))
+            {
+                selected = hit.collider.gameObject;
+                selected.GetComponent<Grabable>().beingSelected = true;
+            }
+            else if (hit.collider == null)
+            {
+                selected = null;
+            }
+
+            lastHit = hit;
+
+            if (grabable.Count == 1)
+            {
+                selected = grabable[0];
+                selected.GetComponent<Grabable>().beingSelected = true;
             }
         }
 
-        if (Mathf.Abs(posDiff.x) > 1 || Mathf.Abs(posDiff.y) > 1)
+        if (selected != null)
         {
-            //print("Speed Reached");
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                inOrbit = selected.transform;
+
+                orbitAcceleration = minAcceleration;
+
+                directionMult = -1;
+
+                selected.GetComponent<Grabable>().beingSelected = false;
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                inOrbit = selected.transform;
+
+                orbitAcceleration = minAcceleration;
+
+                directionMult = 1;
+
+                selected.GetComponent<Grabable>().beingSelected = false;
+            }
         }
 
-        attackSpeed = CalculateSpeed(posDiff);
+        if (inOrbit != null)
+        {
+            canGrab = false;
 
-        //print(attackSpeed);
+            Vector3 target = inOrbit.position;
 
-        lastPos = transform.position;
-    }
+            target -= transform.position;
 
-    private float CalculateSpeed(Vector3 PosDiff)
-    {
-        float xSqr = Mathf.Pow(PosDiff.x, 2);
-        float ySqr = Mathf.Pow(PosDiff.y, 2);
-        float result = Mathf.Sqrt(xSqr + ySqr);
+            target.z = 0;
 
-        return result;
+            float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 270;
+
+            inOrbit.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+            inOrbit.gameObject.GetComponent<Rigidbody2D>().AddForce(inOrbit.right * directionMult * orbitAcceleration);
+
+            inOrbit.position = (inOrbit.position - this.gameObject.transform.position).normalized * maxRadius + this.gameObject.transform.position;
+
+            if (Input.GetKeyUp(KeyCode.Mouse0) && directionMult == -1)
+            {
+                inOrbit = null;
+
+                canGrab = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1) && directionMult == 1)
+            {
+                inOrbit = null;
+
+                canGrab = true;
+            }
+
+            orbitAcceleration += Time.deltaTime * accelerationMult;
+
+            orbitAcceleration = Mathf.Clamp(orbitAcceleration, minAcceleration, maxAcceleration);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag == "Moveable")
+        if (col.gameObject.GetComponent<Grabable>() != null && col.gameObject.GetComponent<Grabable>().isGrabable && canGrab)
         {
-            col.transform.Find("Light").GetComponent<Light>().color = highlightColor;
-
-            col.transform.Find("Light").gameObject.SetActive(true);
+            grabable.Add(col.gameObject);
         }
     }
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.tag == "Moveable")
+        if (col.gameObject.GetComponent<Grabable>() != null && col.gameObject.GetComponent<Grabable>().isGrabable && canGrab && !grabable.Contains(col.gameObject))
         {
-            if (Input.GetMouseButton(0))
-            {
-                hoveringOver = col.gameObject;
-
-                col.transform.Find("Light").GetComponent<Light>().color = activeColor;
-            }
+            grabable.Add(col.gameObject);
         }
     }
-
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.tag == "Moveable")
+        if (grabable.Contains(col.gameObject))
         {
-            col.transform.Find("Light").gameObject.SetActive(false);
+            col.gameObject.GetComponent<Grabable>().beingSelected = false;
 
-            hoveringOver = null;
+            grabable.Remove(col.gameObject);
         }
     }
 }

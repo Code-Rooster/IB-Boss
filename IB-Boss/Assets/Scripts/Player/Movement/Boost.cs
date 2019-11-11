@@ -48,7 +48,7 @@ public class Boost : MonoBehaviour
             dashBar.color = new Color32(255, 0, 0, 112);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && canBoost)
+        if (Input.GetKeyDown(KeyCode.Space) && canBoost && pM.isMoving)
         {
             pM.isBoosting = true;
             canBoost = false;

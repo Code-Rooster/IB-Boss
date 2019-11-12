@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Telekinesis : MonoBehaviour
 {
+    public CameraShake camShake;
+
     public Transform inOrbit;
     public GameObject selected;
 
@@ -25,6 +27,11 @@ public class Telekinesis : MonoBehaviour
     public LayerMask orbitLayers;
 
     public bool canGrab = true;
+
+    private void Start()
+    {
+        camShake = Camera.main.GetComponent<CameraShake>();
+    }
 
     void Update()
     {
@@ -107,21 +114,28 @@ public class Telekinesis : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.Mouse0) && directionMult == -1)
             {
-                inOrbit = null;
-
-                canGrab = true;
+                LetGo();
             }
             else if (Input.GetKeyUp(KeyCode.Mouse1) && directionMult == 1)
             {
-                inOrbit = null;
-
-                canGrab = true;
+                LetGo();
             }
 
             orbitAcceleration += Time.deltaTime * accelerationMult;
 
             orbitAcceleration = Mathf.Clamp(orbitAcceleration, minAcceleration, maxAcceleration);
         }
+    }
+
+    private void LetGo()
+    {
+        inOrbit.gameObject.GetComponent<Grabable>().letGo = true;
+
+        inOrbit = null;
+
+        canGrab = true;
+
+        camShake.StartCoroutine(camShake.ShakeCam(1.5f, 5, 0.05f));
     }
 
     private void OnTriggerEnter2D(Collider2D col)

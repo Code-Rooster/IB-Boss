@@ -6,6 +6,8 @@ public class Manager : MonoBehaviour
 {
     public GameObject CurrentRoom;
 
+    public static LayerMask letGoCollisions;
+
     void Start()
     {
         Screen.fullScreen = true;

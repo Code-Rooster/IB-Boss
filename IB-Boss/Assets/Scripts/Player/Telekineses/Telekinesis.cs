@@ -134,8 +134,6 @@ public class Telekinesis : MonoBehaviour
         inOrbit = null;
 
         canGrab = true;
-
-        camShake.StartCoroutine(camShake.ShakeCam(1.5f, 5, 0.05f));
     }
 
     private void OnTriggerEnter2D(Collider2D col)

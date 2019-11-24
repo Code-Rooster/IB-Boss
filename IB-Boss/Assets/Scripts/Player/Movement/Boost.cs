@@ -16,10 +16,11 @@ public class Boost : MonoBehaviour
 
     public float length;
     public float maxWaitTime;
-    public float boostCamMagnitude;
-    public float boostCamRoughness;
-    public float boostCamFadeInTime;
-    public float boostCamFadeOutTime;
+
+    public float shakeMagnitude;
+    public int shakeIterations;
+    public float timePerShakeCycle;
+    public float shakeRoughness;
 
     private float boostTimer;
     private float timeTilBoost;
@@ -50,7 +51,7 @@ public class Boost : MonoBehaviour
             dashBar.color = new Color32(255, 0, 0, 112);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canBoost)
+        if (Input.GetKeyDown(KeyCode.Space) && canBoost && pM.canMove && rb.velocity != Vector2.zero)
         {
             pM.isBoosting = true;
             canBoost = false;
@@ -58,7 +59,8 @@ public class Boost : MonoBehaviour
             boostTimer = 0;
 
             boostParticles.Play();
-            camShake.StartCoroutine(camShake.ShakeCam(10, 5, 0.05f));
+            camShake.StopAllCoroutines();
+            camShake.StartCoroutine(camShake.ShakeCam(shakeMagnitude, shakeIterations, timePerShakeCycle, shakeRoughness));
         }
 
         if (pM.isBoosting)
@@ -75,6 +77,12 @@ public class Boost : MonoBehaviour
                 pM.isBoosting = false;
                 canBoost = false;
                 timeTilBoost = 0;
+            }
+
+            if (pM.canMove == false)
+            {
+                boostTimer = length;
+                rb.velocity = Vector2.zero;
             }
         }
 

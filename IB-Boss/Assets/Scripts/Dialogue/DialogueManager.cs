@@ -54,6 +54,7 @@ public class DialogueManager : MonoBehaviour
         D = d;
 
         pM.canMove = false;
+        pM.rb.velocity = Vector2.zero;
 
         startedDialogue = true;
         tdCheck = false;

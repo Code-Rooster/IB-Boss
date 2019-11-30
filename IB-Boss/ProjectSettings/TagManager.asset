@@ -16,6 +16,7 @@ TagManager:
   - KeyHUD
   - NPC
   - Enemy
+  - Node
   layers:
   - Default
   - TransparentFX

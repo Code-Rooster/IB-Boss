@@ -9,17 +9,22 @@ public class DialogueManager : MonoBehaviour
     private Dialogue D;
     public DialogueTrigger dT;
     private ConditionDetection cD;
-    private QuestDetection qD;
+    //private QuestDetection qD;
     public ModifiedDialogue mD;
     private Effects fX;
     public PlayerMovement pM;
 
     public DialogueBox dB;
 
+    public GameObject yesNoBox;
+
     public Queue<string> sentences;
 
     public TMP_Text dialogueText;
     public TMP_Text nameText;
+
+    public TMP_Text yesText;
+    public TMP_Text noText;
 
     public string currentSentence;
     public string dialogueName;
@@ -40,12 +45,14 @@ public class DialogueManager : MonoBehaviour
     {
         sentences = new Queue<string>();
 
-        dB = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<DialogueBox>();
+        //dB = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<DialogueBox>();
 
-        qD = GameObject.FindGameObjectWithTag("QM").GetComponent<QuestDetection>();
+        //qD = GameObject.FindGameObjectWithTag("QM").GetComponent<QuestDetection>();
 
         cD = this.gameObject.GetComponent<ConditionDetection>();
         fX = this.gameObject.GetComponent<Effects>();
+
+        yesNoBox.SetActive(false);
     }
 
     public void StartDialogue(Dialogue d, string[] dialogue, string name, DialogueTrigger DT)
@@ -96,11 +103,25 @@ public class DialogueManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        currentSentence = qD.FindQuests(sentences.Dequeue());
+        //currentSentence = qD.FindQuests(sentences.Dequeue());
+
+        currentSentence = sentences.Dequeue();
 
         mD = cD.FindMods(currentSentence);
 
         currentSentence = mD.sentence;
+
+        if (mD.yesNoQuestion)
+        {
+            yesNoBox.SetActive(true);
+
+            yesText.text = mD.yNFirstTerm;
+            noText.text = mD.yNSecondTerm;
+        }
+        else
+        {
+            yesNoBox.SetActive(false);
+        }
 
         fX.type = true;
 
@@ -109,7 +130,6 @@ public class DialogueManager : MonoBehaviour
 
     public void SkipAhead()
     {
-        //Stop typing
         fX.type = false;
 
         dialogueText.text = "";
@@ -122,13 +142,24 @@ public class DialogueManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        startedDialogue = false;
+        //startedDialogue = false;
 
         switch (D.endCondition)
         {
             case Dialogue.EndCondtion.NextDialogue:
                 dialogueAnim.Play("CloseDialogue");
-                dT.dialogueIndex++;
+                if (D.triggerIndex == -1)
+                {
+                    dT.dialogueIndex++;
+                }
+                else
+                {
+                    dT.dialogueIndex = D.triggerIndex;
+                }
+
+                pM.canMove = true;
+
+                StartCoroutine(WaitForBoxToClose());
 
                 pM.canMove = true;
 
@@ -144,17 +175,50 @@ public class DialogueManager : MonoBehaviour
                 trigger.TriggerDialogue();
                 break;
             case Dialogue.EndCondtion.Nothing:
-                dialogueAnim.Play("CloseDialogue");
 
-                pM.canMove = true;
+                if (mD.yesNoQuestion)
+                {
+                    print(mD.yNResponseName + " " + mD.yNResponseIndex);
 
+                    DialogueTrigger yNTrigger = GameObject.Find(mD.yNResponseName).GetComponent<DialogueTrigger>();
+
+                    sentenceCount = 0;
+
+                    dialogueName = yNTrigger.dialogueName;
+
+                    yNTrigger.dialogueIndex = mD.yNResponseIndex;
+                    yNTrigger.TriggerDialogue();
+                }
+                else
+                {
+                    dialogueAnim.Play("CloseDialogue");
+
+                    pM.canMove = true;
+
+                    StartCoroutine(WaitForBoxToClose());
+
+                }
                 break;
             default:
                 dialogueAnim.Play("CloseDialogue");
 
                 pM.canMove = true;
 
+                StartCoroutine(WaitForBoxToClose());
+
                 break;
         }
+    }
+
+    private IEnumerator WaitForBoxToClose()
+    {
+        while (dB.isOpen)
+        {
+            yield return null;
+        }
+
+        startedDialogue = false;
+
+        pM.canMove = true;
     }
 }

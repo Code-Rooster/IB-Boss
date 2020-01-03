@@ -1,9 +1,14 @@
-﻿Hey Mr. Glenn!
-Welcome to my project! (Sort of)
-This is essentially the game in it's most barebones state.
-It has the movement (Which is a little clunky),
-A robust dialogue system (With effects like <j>jitter,<j> <w>wave,<w> and <R>all<R> <K>sorts<K> <M>of<M> <C>colors.<C>)
-And a lock and key system (Which I couldn't find a use for in this little demo).
-Now I need to make more art, finish designing the first floor of the mansion, create a combat system, make the first boss, and compose a bunch of music!
-You'll find a chest waiting on the other side of this room for ya'!
-Thanks for being my advisor!
+﻿<w>Hiya!<w>
+~YesNo:Good(Amory[1]),Bad(Amory[2])~How are you <w><K>feeling<K><w> right now?
+|
+{TD}[Amory](3)That's <w>GREAT!<w>
+I'm so glad to hear that.
+Unfotunately, <j>I have not been so lucky.<j>
+<w>Ahaha!<w> Pay what I just said <R>no heed!<R>
+It was just a jest!
+|
+{TD}[Amory](3)I'm <w>so sorry<w> to hear that.
+Is there anything <w><C>I<C><w> can do? No? Okay!
+|
+Anyway, welcome to my home!
+It's beautiful, isn't it?

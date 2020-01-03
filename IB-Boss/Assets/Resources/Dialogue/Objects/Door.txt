@@ -1,0 +1,7 @@
+﻿You do not have the required key for this door.
+|
+This door requires a <w>bronze key.<w> Use one?
+|
+This door requires a <w>silver key.<w> Use one?
+|
+This door requires a <w>gold key.<w> Use one?

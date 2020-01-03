@@ -26,6 +26,11 @@ public class DialogueTrigger : MonoBehaviour
 
         TextAsset textFile = Resources.Load<TextAsset>("Dialogue/Characters/" + dialogueName);
 
+        if (textFile == null)
+        {
+            textFile = Resources.Load<TextAsset>("Dialogue/Objects/" + dialogueName);
+        }
+
         lines = textFile.text.Split('\n');
 
         int dialogueCount = 0;
@@ -53,13 +58,14 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") && gameObject.tag != "Chest")
         {
             if (canInteract)
             {
                 TriggerDialogue();
             }
         }
+        
     }
 
     public void TriggerDialogue()
@@ -70,11 +76,34 @@ public class DialogueTrigger : MonoBehaviour
         {
             string firstDialogue = dialogues[dialogueIndex][0];
 
+            print(gameObject.name + ": fD: " + firstDialogue);
+
             if (firstDialogue.Contains("{ND}"))
             {
                 dialogue[dialogueIndex].endCondition = Dialogue.EndCondtion.NextDialogue;
 
                 dialogues[dialogueIndex][0] = firstDialogue.Replace("{ND}", "");
+
+                if (firstDialogue.Contains("{ND}("))
+                {
+                    string toParse = null;
+
+                    for (int i = System.Array.IndexOf(firstDialogue.ToCharArray(), '(') + 1; i < firstDialogue.ToCharArray().Length; i++)
+                    {
+                        if (firstDialogue.ToCharArray()[i] != ')')
+                        {
+                            toParse += firstDialogue.ToCharArray()[i];
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    int.TryParse(toParse.ToString(), out dialogue[dialogueIndex].triggerIndex);
+
+                    dialogues[dialogueIndex][0] = firstDialogue.Replace("{ND}(" + toParse + ")", "");
+                }
             }
             else if (firstDialogue.Contains("{TD}"))
             {

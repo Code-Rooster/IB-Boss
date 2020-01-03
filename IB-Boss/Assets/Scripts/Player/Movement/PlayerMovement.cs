@@ -71,5 +71,10 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3((rb.velocity.x / Mathf.Abs(rb.velocity.x)) * boostSpeed, (rb.velocity.y / Mathf.Abs(rb.velocity.y)) * boostSpeed, 0);
             }
         }
+
+        if (!canMove)
+        {
+            rb.velocity = Vector2.zero;
+        }
     }
 }

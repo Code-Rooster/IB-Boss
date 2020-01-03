@@ -10,7 +10,7 @@ public class KeyManager : MonoBehaviour
     public int silverCount;
     public int goldCount;
 
-    public enum keyType { BronzeKey, SilverKey, GoldKey };
+    public enum keyType { Bronze, Silver, Gold };
 
     private void Start()
     {
@@ -21,16 +21,37 @@ public class KeyManager : MonoBehaviour
     {
         switch (kT)
         {
-            case (keyType.BronzeKey):
+            case (keyType.Bronze):
                 bronzeCount++;
                 break;
-            case (keyType.SilverKey):
+            case (keyType.Silver):
                 silverCount++;
                 break;
-            case (keyType.GoldKey):
+            case (keyType.Gold):
                 goldCount++;
                 break;
         }
+
+        kHUD.UpdateKeyHUD(bronzeCount, silverCount, goldCount);
+    }
+
+    public void CollectBronzeKey()
+    {
+        bronzeCount++;
+
+        kHUD.UpdateKeyHUD(bronzeCount, silverCount, goldCount);
+    }
+
+    public void CollectSilverKey()
+    {
+        silverCount++;
+
+        kHUD.UpdateKeyHUD(bronzeCount, silverCount, goldCount);
+    }
+
+    public void CollectGoldKey()
+    {
+        goldCount++;
 
         kHUD.UpdateKeyHUD(bronzeCount, silverCount, goldCount);
     }
@@ -39,19 +60,19 @@ public class KeyManager : MonoBehaviour
     {
         switch (kT)
         {
-            case (keyType.BronzeKey):
+            case (keyType.Bronze):
                 if (bronzeCount > 0)
                 {
                     bronzeCount--;
                 }
                 break;
-            case (keyType.SilverKey):
+            case (keyType.Silver):
                 if (silverCount > 0)
                 {
                     silverCount--;
                 }
                 break;
-            case (keyType.GoldKey):
+            case (keyType.Gold):
                 if (goldCount > 0)
                 {
                     goldCount--;

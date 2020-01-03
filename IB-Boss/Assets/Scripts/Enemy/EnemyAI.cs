@@ -286,15 +286,16 @@ public class EnemyAI : MonoBehaviour
 
     private void Chase ()
     {
-        //DetSpeed();
-
-        //for (int i = 0; i < alreadyVisited.Count; i++)
-        //{
-            //while (currentSquare != alreadyVisited[i])
-            //{
-                //target = alreadyVisited[i].transform.position;
-            //}
-        //}
+        if (bestPath.Count > 0)
+        {
+            for (int i = 0; i < bestPath.Count; i++)
+            {
+                if (bestPath[i] != null)
+                {
+                    target = bestPath[i].transform.position;
+                }
+            }
+        }
     }
 
     private void StartFormation()

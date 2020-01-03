@@ -1,6 +1,5 @@
-﻿(Inside, there's <K>a note.<K> It says:
-"Dear Mr. Glenn,
-you can toggle fullscreen by pressing the <C>TAB<C> button,
-and exit the game by pressing the <C>ESCAPE<C> key and then clicking <C>QUIT.<C>
-Thank you,
-Amory Acosta")
+﻿{TD}[The Entertainer](1)I mean... Yeah?
+|
+{TD}[The Entertainer](2)... Thanks?
+|
+{TD}[The Entertainer](3)Oh man.

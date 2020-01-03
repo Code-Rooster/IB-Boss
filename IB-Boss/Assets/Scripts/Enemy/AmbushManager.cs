@@ -123,13 +123,16 @@ public class AmbushManager : MonoBehaviour
             enemies.Add(GameObject.FindGameObjectsWithTag("Enemy")[e].GetComponent<EnemyAI>());
         }
 
-        while (true)
+        if (enemies.Count > 0)
         {
-            for (int i = 0; i < enemies.Count; i++)
+            while (true)
             {
-                enemies[i].FindPath();
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].FindPath();
 
-                yield return new WaitForSeconds(enemyPathfindDelay);
+                    yield return new WaitForSeconds(enemyPathfindDelay);
+                }
             }
         }
     }

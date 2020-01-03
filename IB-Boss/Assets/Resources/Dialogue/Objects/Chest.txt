@@ -1,0 +1,37 @@
+﻿{ND}(4)You collected a <w>bronze key!<w>
+|
+{ND}(4)You collected a <w>silver key!<w>
+|
+{ND}(4)You collected a <w>gold key!<w>
+|
+{ND}(4)You collected <w>your death certificate!<w>
+|
+{ND}There's nothing left in the chest.
+|
+{ND}Seriosly, there's nothing left.
+|
+{ND}You can stop checking me now.
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}...
+|
+{ND}(4)Please go away.

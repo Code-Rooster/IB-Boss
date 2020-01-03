@@ -1,1 +1,5 @@
-﻿{TD}[The Entertainer](1)<j>Who... Who are you?!<j>
+﻿{TD}[The Entertainer](1)I mean... Yeah?
+|
+{TD}[The Entertainer](2)... Thanks?
+|
+{TD}[The Entertainer](3)Oh no.

@@ -1,8 +1,17 @@
-{TD}[Player](0)<w>WELL <B>HELLOOOOOOO<B> THERE!<w>
-<w>Howya doin' kid?<w>
-<j>Good! Good. Listen, I've got a little favor for ya!<w>
+{TD}[You](0)Whoa, wait... What?
+You... Actually made it here?
 |
-Eh. Nothin' to worry about. Not <w>now,<w> anyway!
-You've no doubt noticed that it's a little... <j>dark...<j> in here.
-Nothing a little <w>ELBOW GREASE<w> can't fix!
-Alright kiddo, I want <w>you<w> to go find a... A light switch or something.
+{TD}[You](1)I...
+I wasn't expecting that. Wow, good job, I guess?
+Uhh...
+|
+{TD}[You](2)I mean, if <w>that<w> didn't get rid of you...
+|
+{ND}<R><j>I guess I've gotta take you out <w>myself.<w><j><R>
+|
+oh... geez...
+you're pretty... tough, eh?
+oof... gimme a sec to catch my breath...
+.....................................................................................
+<K><w>WHOO!<w><K>
+That was <K><w>EXHILARATING!<w><K>

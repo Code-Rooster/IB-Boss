@@ -18,6 +18,10 @@ public class Door : MonoBehaviour
     public bool backLocked = false;
     public bool frontLocked = false;
 
+    public enum RequiredKey { Bronze, Silver, Gold, CantUnlock }
+
+    public RequiredKey requiredKey;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -26,15 +30,6 @@ public class Door : MonoBehaviour
 
         entranceCol = this.transform.Find("Entrance").GetComponent<BoxCollider2D>();
         exitCol = this.transform.Find("Exit").GetComponent<BoxCollider2D>();
-
-        if (backLocked)
-        {
-            exitCol.isTrigger = false;
-        }
-        if (frontLocked)
-        {
-            entranceCol.isTrigger = false;
-        }
     }
 
     private void Update()
@@ -57,11 +52,31 @@ public class Door : MonoBehaviour
                 pM.canMove = true;
             }
         }
+
+        if (backLocked)
+        {
+            exitCol.isTrigger = false;
+        }
+        else if (!backLocked && !exitCol.isTrigger)
+        {
+            exitCol.isTrigger = true;
+        }
+        if (frontLocked)
+        {
+            entranceCol.isTrigger = false;
+        }
+        else if (!frontLocked && !entranceCol.isTrigger)
+        {
+            entranceCol.isTrigger = true;
+        }
     }
 
     public void Unlock()
     {
         print("... You unlocked the door!");
+
+        backLocked = false;
+        frontLocked = false;
 
         entranceCol.isTrigger = true;
         exitCol.isTrigger = true;

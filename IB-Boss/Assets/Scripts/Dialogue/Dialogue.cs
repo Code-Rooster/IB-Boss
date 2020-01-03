@@ -8,7 +8,7 @@ public class Dialogue
 {
     //public string[] sentences;
 
-    public int triggerIndex;
+    public int triggerIndex = -1;
 
     public string triggerName;
 

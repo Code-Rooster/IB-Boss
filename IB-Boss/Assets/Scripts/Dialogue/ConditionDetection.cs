@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ConditionDetection : MonoBehaviour
 {
     string[] modifiers = { "<j>", "<w>", "<R>", "<M>", "<C>", "<K>" };
+
+    SpecialConditions sC;
+
+    private void Start()
+    {
+        sC = gameObject.GetComponent<SpecialConditions>();
+    }
 
     public ModifiedDialogue FindMods(string sentence)
     {
@@ -72,6 +80,8 @@ public class ConditionDetection : MonoBehaviour
         }
 
         mD.sentence = finishedSentence;
+
+        mD = sC.CheckForSpecialConditions(mD);
 
         return mD;
     }

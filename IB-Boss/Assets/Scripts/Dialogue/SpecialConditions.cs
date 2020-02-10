@@ -28,6 +28,7 @@ public class SpecialConditions : MonoBehaviour
 
             int firstResponseIndex = 0;
             int secondResponseIndex = 0;
+            int responseIndex = -1;
 
             string firstTermParse = null;
             string secondTermParse = null;
@@ -92,7 +93,7 @@ public class SpecialConditions : MonoBehaviour
                     {
                         i++;
                     }
-                    if (sentence.ToCharArray()[i] != '~')
+                    if (sentence.ToCharArray()[i] != '#')
                     {
                         secondTerm += sentence.ToCharArray()[i];
                     }
@@ -144,11 +145,43 @@ public class SpecialConditions : MonoBehaviour
                     }
                 }
             }
-            toReplace = "~YesNo:" + firstTerm + "(" + firstResponseName + "[" + firstResponseIndex.ToString() + "])," + secondTerm + "(" + secondResponseName + "[" + secondResponseIndex.ToString() + "])~";
+
+            if (sentence.Contains("])#"))
+            {
+                string toParse = null;
+
+                for (int r = System.Array.IndexOf(sentence.ToCharArray(), '#') + 1; r < sentence.ToCharArray().Length; r++)
+                {
+                    if (sentence.ToCharArray()[r] != '~')
+                    {
+                        toParse += sentence.ToCharArray()[r];
+                    }
+
+                    else
+                    {
+                        int.TryParse(toParse, out responseIndex);
+
+                        break;
+                    }
+                }
+            }
+
+            //secondTerm = secondTerm.Replace("#" + responseIndex.ToString(), "");
+
+            toReplace = "~YesNo:" + firstTerm + "(" + firstResponseName + "[" + firstResponseIndex.ToString() + "])," + secondTerm + "(" + secondResponseName + "[" + secondResponseIndex.ToString() + "])";
+
+            if (responseIndex != -1)
+            {
+                toReplace += "#" + responseIndex.ToString();
+            }
+
+            toReplace += "~";
 
             mD.sentence = sentence.Replace(toReplace, "");
 
             newMD.yesNoQuestion = true;
+
+            newMD.yNIndex = responseIndex;
 
             if (sentence.Contains("{Essay}"))
             {

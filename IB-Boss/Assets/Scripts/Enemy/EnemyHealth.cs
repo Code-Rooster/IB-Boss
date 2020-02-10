@@ -41,7 +41,7 @@ public class EnemyHealth : MonoBehaviour
 
         rb = gameObject.GetComponent<Rigidbody2D>();
 
-        anim = transform.Find(gameObject.name + "Renderer").GetComponent<Animator>();
+        //anim = transform.Find(gameObject.name + "Renderer").GetComponent<Animator>();
     }
 
     public void TakeDamage(float amount)
@@ -55,12 +55,11 @@ public class EnemyHealth : MonoBehaviour
 
         healthBar.fillAmount = currentHealth / maxHealth;
 
-        if (currentHealth < lastHealth)
+        if (currentHealth < lastHealth && currentHealth != 0)
         {
-            //camShake.StopAllCoroutines();
-            camShake.StartCoroutine(camShake.ShakeCam(hurtMagnitude, hurtIterations, hurtTimePerShakeCycle, hurtMagnitude));
+            camShake.StartShake(6, 1.2f);
 
-            anim.Play(gameObject.name + "Hurt");
+            //anim.Play(gameObject.name + "Hurt");
         }
 
         if (currentHealth <= 0)
@@ -85,10 +84,9 @@ public class EnemyHealth : MonoBehaviour
 
         transform.Find("HealthCanvas").gameObject.SetActive(false);
 
-        //camShake.StopAllCoroutines();
-        camShake.StartCoroutine(camShake.ShakeCam(killMagnitude, killIterations, killTimePerShakeCycle, killRoughness));
+        camShake.StartShake(8, 1f);
 
-        anim.Play(gameObject.name + "Death");
+        //anim.Play(gameObject.name + "Death");
         Destroy(gameObject, 0.5f);
     }
 }

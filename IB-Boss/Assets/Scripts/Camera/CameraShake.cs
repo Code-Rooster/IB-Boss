@@ -4,39 +4,51 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public IEnumerator ShakeCam(float magnitude, float iterations, float timePerCicle, float roughness)
+    public float frequency = 10;
+    public float seed;
+    public float recoverySpeed = 1.5f;
+    public float trauma = 1;
+    public float traumaExp;
+    public float intensity = 1;
+
+    public bool startShake;
+
+    private void Start()
     {
-        List<Vector3> states = new List<Vector3>();
+        seed = Random.value;
+    }
 
-        for (int i = 0; i < iterations; i++)
+    private void Update()
+    {
+        if (startShake)
         {
-            states.Add(new Vector3(magnitude * (Random.Range(0, 2) * 2 - 1), magnitude * (Random.Range(0, 2) * 2 - 1), magnitude * (Random.Range(0, 2) * 2 - 1)));
+            StartShake(1, intensity);
+            startShake = false;
         }
 
-        for (int i = 0; i < iterations; i++)
-        {
-            float elapsedTime = 0;
+        float shake = Mathf.Pow(trauma, traumaExp) * intensity;
 
-            while (elapsedTime < timePerCicle)
-            {
-                this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(states[i].x, states[i].y, 0), Time.deltaTime * elapsedTime / timePerCicle);
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler(0, 0, states[i].z), Time.deltaTime * elapsedTime / timePerCicle);
+        transform.localPosition = new Vector3(
+            Mathf.PerlinNoise(seed, Time.time * frequency) * 2 - 1,
+            Mathf.PerlinNoise(seed + 1, Time.time * frequency) * 2 - 1,
+            0) * shake;
 
-                elapsedTime += Time.deltaTime;
+        transform.localRotation = Quaternion.Euler(new Vector3(
+            0, 0,
+            Mathf.PerlinNoise(seed + 2, Time.time * frequency) * 2 - 1)
+            * shake);
 
-                //yield return null;
-                yield return new WaitForSeconds(roughness);
-            }
-            this.transform.localPosition = Vector3.zero;
-            this.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
+        trauma = Mathf.Clamp01(trauma - recoverySpeed * Time.deltaTime);
+    }
 
-        while (transform.localPosition != Vector3.zero || transform.rotation != Quaternion.Euler(0, 0, 0))
-        {
-            transform.localPosition = Vector3.Lerp(transform.position, Vector3.zero, Time.deltaTime);
-            transform.localRotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime);
+    public void StartShake(float freq, float shakeIntensity)
+    {
+        seed = Random.value;
 
-            yield return new WaitForSeconds(roughness);
-        }
+        trauma = 1;
+
+        frequency = freq;
+
+        intensity = shakeIntensity;
     }
 }

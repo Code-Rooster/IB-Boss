@@ -59,8 +59,8 @@ public class Boost : MonoBehaviour
             boostTimer = 0;
 
             boostParticles.Play();
-            camShake.StopAllCoroutines();
-            camShake.StartCoroutine(camShake.ShakeCam(shakeMagnitude, shakeIterations, timePerShakeCycle, shakeRoughness));
+
+            camShake.StartShake(10, 0.8f);
         }
 
         if (pM.isBoosting)

@@ -8,8 +8,6 @@ TagManager:
   - DialogueBox
   - Moveable
   - Room
-  - HorizontalWall
-  - VerticalWall
   - Manager
   - Character
   - QM
@@ -17,6 +15,15 @@ TagManager:
   - NPC
   - Enemy
   - Node
+  - Chest
+  - Door
+  - Cutscene
+  - SceneTransition
+  - SceneLoader
+  - UI
+  - Camera
+  - YesNoBox
+  - The Entertainer
   layers:
   - Default
   - TransparentFX

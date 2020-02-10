@@ -11,10 +11,11 @@ public class ModifiedDialogue
     public bool yesNoQuestion;
     public bool essayQuestion;
 
+    public bool answeredYes = false;
+    public bool answeredNo = false;
+
     public string yNFirstTerm;
     public string yNSecondTerm;
-
-    public string yNBool;
 
     public string yNFirstResponseTriggerName;
     public string yNSecondResponseTriggerName;
@@ -23,6 +24,7 @@ public class ModifiedDialogue
 
     public string yNResponseName;
     public int yNResponseIndex;
+    public int yNIndex;
 
     //0 = Red
     //1 = Mechanic

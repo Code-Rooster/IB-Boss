@@ -5,19 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/LightingTest.unity
-    guid: e4148dc06e4ded94f90ad36f537c40d3
-  - enabled: 0
-    path: Assets/Scenes/Floor1.unity
-    guid: 7003ffce95f408e47bb3255791e6bd2c
-  - enabled: 0
-    path: Assets/Scenes/IntroForMrGlenn.unity
-    guid: 3c8f7de42c7f29149869dedd51ccd153
   - enabled: 1
-    path: Assets/Scenes/TestingArea.unity
-    guid: 3ee2706702da4e54e978303643ce6793
+    path: Assets/Scenes/TutorialScene.unity
+    guid: dda54ceaebb4cf7418393e1489c2343e
+  - enabled: 1
+    path: Assets/Scenes/BossArena.unity
+    guid: 11880e0fadcef0b41b137f75d6cb7882
+  - enabled: 0
+    path: Assets/Scenes/StartScene.unity
+    guid: 87ae86b42a0a3bb4ba1855f94cb39498
+  - enabled: 0
+    path: Assets/Scenes/Death.unity
+    guid: 574060aeee97d3a4faf6b49d6acdd0d9
   m_configObjects: {}

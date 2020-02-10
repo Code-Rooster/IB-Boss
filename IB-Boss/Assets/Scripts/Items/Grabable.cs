@@ -54,23 +54,55 @@ public class Grabable : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        float force = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.y, 2));
-
-        force = Mathf.Clamp(force, 0, 2.75f);
-
         EnemyHealth eH = col.gameObject.GetComponent<EnemyHealth>();
 
         if (eH != null && letGo)
         {
-            eH.TakeDamage(force);
+            if (rb.velocity.x > 10f || rb.velocity.y > 10f)
+            {
+                eH.TakeDamage(4f);
+            }
+            else if (rb.velocity.x > 5f || rb.velocity.y > 5f)
+            {
+                eH.TakeDamage(3f);
+            }
+            else if (rb.velocity.x > 2.5f || rb.velocity.y > 2.5f)
+            {
+                eH.TakeDamage(2f);
+            }
+            else if (rb.velocity.x > 0.5f || rb.velocity.y > 0.5f)
+            {
+                eH.TakeDamage(1f);
+            }
         }
 
-        if ((GlobalManager.Instance.letGoCollision & 1 << col.gameObject.layer) == 1 << col.gameObject.layer)
+        else if (col.gameObject.tag == "The Entertainer" && letGo)
+        {
+            EntertainerHealth enH = GameObject.Find("The Entertainer").GetComponent<EntertainerHealth>();
+
+            if (rb.velocity.x > 10f || rb.velocity.y > 10f)
+            {
+                enH.TakeDamage(4f);
+            }
+            else if (rb.velocity.x > 5f || rb.velocity.y > 5f)
+            {
+                enH.TakeDamage(3f);
+            }
+            else if (rb.velocity.x > 2.5f || rb.velocity.y > 2.5f)
+            {
+                enH.TakeDamage(2f);
+            }
+            else if (rb.velocity.x > 0.5f || rb.velocity.y > 0.5f)
+            {
+                enH.TakeDamage(1f);
+            }
+        }
+
+        else if ((GlobalManager.Instance.letGoCollision & 1 << col.gameObject.layer) == 1 << col.gameObject.layer)
         {
             if (letGo)
             {
-                camShake.StopAllCoroutines();
-                camShake.StartCoroutine(camShake.ShakeCam(shakeMagnitude * force, shakeIterations, timePerShakeCycle, shakeRoughness));
+                camShake.StartShake(7, 1f);
 
                 letGo = false;
             }

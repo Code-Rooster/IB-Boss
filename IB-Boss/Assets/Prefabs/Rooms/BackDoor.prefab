@@ -162,10 +162,12 @@ GameObject:
   - component: {fileID: 4216188654984458829}
   - component: {fileID: 8046649035002345211}
   - component: {fileID: -6292299872612629363}
-  - component: {fileID: 8119261940302430643}
+  - component: {fileID: -8941421774539859150}
+  - component: {fileID: 1880802429155797246}
+  - component: {fileID: 1436904955599898165}
   m_Layer: 0
   m_Name: BackDoor
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -252,12 +254,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pM: {fileID: 0}
+  kM: {fileID: 0}
+  dT: {fileID: 0}
+  yNE: {fileID: 0}
   enterPoint: {fileID: 7901354193338439141}
   exitPoint: {fileID: 7226313188669231457}
   point: {fileID: 0}
   backLocked: 0
   frontLocked: 0
---- !u!114 &8119261940302430643
+  expectUnlock: 0
+  canInteract: 0
+  requiredKey: 0
+--- !u!114 &-8941421774539859150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306290833388645274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9940ac890c8da9541903e7f472176889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueName: 
+  lines: []
+  dialogueIndex: 0
+--- !u!61 &1880802429155797246
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306290833388645274}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 3.5}
+  m_EdgeRadius: 0
+--- !u!114 &1436904955599898165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7f721e97785b84b979dfe22c421488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  on: 1
   parentName: 4
 --- !u!1 &2531393102902602236
 GameObject:

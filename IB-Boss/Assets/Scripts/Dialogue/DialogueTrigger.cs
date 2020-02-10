@@ -58,14 +58,18 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Submit") && gameObject.tag != "Chest")
+        //Find some way to tell if this object is supposed to talk
+        if (Input.GetButtonDown("Submit") && !dM.endingDialogue && gameObject.tag != "Chest" && gameObject.tag != "Door")
         {
             if (canInteract)
             {
                 TriggerDialogue();
             }
+            if (dM.inCutscene && dM.dT == this)
+            {
+                TriggerDialogue();
+            }
         }
-        
     }
 
     public void TriggerDialogue()
@@ -75,8 +79,6 @@ public class DialogueTrigger : MonoBehaviour
         if (!dM.startedDialogue && !dM.isTyping)
         {
             string firstDialogue = dialogues[dialogueIndex][0];
-
-            print(gameObject.name + ": fD: " + firstDialogue);
 
             if (firstDialogue.Contains("{ND}"))
             {
@@ -148,7 +150,7 @@ public class DialogueTrigger : MonoBehaviour
 
             dM.StartDialogue(dialogue[dialogueIndex], dialogues[dialogueIndex], dialogueName, this);
         }
-        else if (dM.startedDialogue && dM.tdCheck && dM.dB.isOpen)
+        else if (dM.startedDialogue && dM.tdCheck && dM.dB.isOpen && dM.sentenceCount > 0)
         {
             dM.DisplayNextSentence();
         }

@@ -7,6 +7,11 @@ public class CameraFollow : MonoBehaviour
     public float smoothTime = 0.3F;
     private Vector3 velocity = Vector3.zero;
 
+    private void Start()
+    {
+        target = GameObject.Find("Player").transform;
+    }
+
     void FixedUpdate()
     {
         // Define a target position above and behind the target transform

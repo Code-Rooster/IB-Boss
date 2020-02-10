@@ -1,0 +1,18 @@
+﻿<K>Visual glitch demonstration<K>
+~YesNo:Yes(Kathleen[2]),No(Kathleen[1])#1~Have you already completed the tutorial?
+|
+Ok! Well let's get started, then!
+To move around, use the <K>WASD keys,<K> or the <K>arrow keys.<K>
+Whichever you prefer.
+That bar near the top left of the screen? That's your <K>Boost Meter.<K>
+Pressing the <K>Space Bar<K> will activate your <M>Boost,<M> which will propel you forward in the direction you're moving.
+Holding down the <K>Left or Right Mouse Buttons<K> while near an object will cause it to rotate around you.
+The direction it rotates depends on which button you push.
+Only <K>object that are highlighted<K> are able to be picked up this way.
+Feel free to mess around in this room for a little while!
+When you feel comfortable enough, go ahead and go through into the door at the back of the room.
+Good luck!
+You're gonna need it.
+|
+Sounds good! Good luck!
+(You're gonna need it.)

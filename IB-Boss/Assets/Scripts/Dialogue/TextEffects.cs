@@ -68,27 +68,7 @@ public class TextEffects : MonoBehaviour
 
         while (true)
         {
-            //if (textFX[sentenceCount].wordColors.keyWords.Length != 0)
-            //{
-            //SetTextColor(keyColor, textFX[sentenceCount].wordColors.keyWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.characterWords.Length != 0)
-            //{
-            //SetTextColor(characterColor, textFX[sentenceCount].wordColors.characterWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.redWords.Length != 0)
-            //{
-            //SetTextColor(redColor, textFX[sentenceCount].wordColors.redWords);
-            //}
-            //if (textFX[sentenceCount].wordColors.mechanicWords.Length != 0)
-            //{
-            //SetTextColor(mechanicColor, textFX[sentenceCount].wordColors.mechanicWords);
-            //}
-
-            //else
-            {
-                dM.dialogueText.ForceMeshUpdate(true);
-            }
+            dM.dialogueText.ForceMeshUpdate(true);
 
             wInfo.Clear();
 

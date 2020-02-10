@@ -5,6 +5,9 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public PlayerMovement pM;
+    public KeyManager kM;
+    public DialogueTrigger dT;
+    public YesNoEvents yNE;
 
     public Transform enterPoint;
     public Transform exitPoint;
@@ -18,6 +21,10 @@ public class Door : MonoBehaviour
     public bool backLocked = false;
     public bool frontLocked = false;
 
+    public bool expectUnlock = false;
+
+    public bool canInteract;
+
     public enum RequiredKey { Bronze, Silver, Gold, CantUnlock }
 
     public RequiredKey requiredKey;
@@ -30,6 +37,8 @@ public class Door : MonoBehaviour
 
         entranceCol = this.transform.Find("Entrance").GetComponent<BoxCollider2D>();
         exitCol = this.transform.Find("Exit").GetComponent<BoxCollider2D>();
+
+        dT = gameObject.GetComponent<DialogueTrigger>();
     }
 
     private void Update()
@@ -69,16 +78,63 @@ public class Door : MonoBehaviour
         {
             entranceCol.isTrigger = true;
         }
+
+        if (expectUnlock)
+        {
+            if (yNE.responses[0] != 0)
+            {
+                if (yNE.responses[0] == 1)
+                {
+                    if (requiredKey == RequiredKey.Bronze)
+                    {
+                        kM.bronzeCount--;
+
+                        Unlock();
+                    } else if (requiredKey == RequiredKey.Silver)
+                    {
+                        kM.silverCount--;
+
+                        Unlock();
+                    } else if (requiredKey == RequiredKey.Gold)
+                    {
+                        kM.goldCount--;
+
+                        Unlock();
+                    }
+                }
+
+                if (Input.GetButtonDown("Submit") && canInteract)
+                {
+                    dT.TriggerDialogue();
+
+                    expectUnlock = false;
+                }
+            }
+        }
     }
 
     public void Unlock()
     {
-        print("... You unlocked the door!");
-
         backLocked = false;
         frontLocked = false;
 
         entranceCol.isTrigger = true;
         exitCol.isTrigger = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.tag == "Player")
+        {
+            canInteract = false;
+        }
     }
 }

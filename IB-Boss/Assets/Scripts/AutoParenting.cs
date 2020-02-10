@@ -8,6 +8,8 @@ public class AutoParenting : MonoBehaviour
 {
     private bool alreadyPlaced = false;
 
+    public bool on = false;
+
     public enum ParentName
     {
         BackWalls,
@@ -21,7 +23,7 @@ public class AutoParenting : MonoBehaviour
 
     private void Awake()
     {
-        if (Application.isEditor && !alreadyPlaced)
+        if (Application.isEditor && !alreadyPlaced && on)
         {
             transform.parent = GameObject.Find(parentName.ToString()).transform;
             alreadyPlaced = true;

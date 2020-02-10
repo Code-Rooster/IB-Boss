@@ -1,0 +1,7 @@
+﻿~YesNo:Yes(STOP[0]),No(STOP[0])#2~Keep going! I know you can!
+|
+~YesNo:Yes(STOP[0]),No(STOP[0])#2~Don't give up!
+|
+~YesNo:Yes(STOP[0]),No(STOP[0])#2~There's still hope!
+|
+~YesNo:Yes(STOP[0]),No(STOP[0])#2~I believe in you!

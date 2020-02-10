@@ -11,6 +11,73 @@ public class Entrance : MonoBehaviour
         door = this.transform.parent.GetComponent<Door>();
     }
 
+    private void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            if (door.canInteract && door.frontLocked)
+            {
+                if (door.requiredKey == Door.RequiredKey.Bronze)
+                {
+                    if (door.kM.bronzeCount >= 1)
+                    {
+                        door.dT.dialogueIndex = 1;
+
+                        door.dT.TriggerDialogue();
+
+                        door.expectUnlock = true;
+                    }
+                    else
+                    {
+                        door.dT.dialogueIndex = 0;
+
+                        door.dT.TriggerDialogue();
+                    }
+                }
+                else if (door.requiredKey == Door.RequiredKey.Silver)
+                {
+                    if (door.kM.silverCount >= 1)
+                    {
+                        door.dT.dialogueIndex = 2;
+
+                        door.expectUnlock = true;
+
+                        door.dT.TriggerDialogue();
+                    }
+                    else
+                    {
+                        door.dT.dialogueIndex = 0;
+
+                        door.dT.TriggerDialogue();
+                    }
+                }
+                else if (door.requiredKey == Door.RequiredKey.Gold)
+                {
+                    if (door.kM.goldCount >= 1)
+                    {
+                        door.dT.dialogueIndex = 3;
+
+                        door.expectUnlock = true;
+
+                        door.dT.TriggerDialogue();
+                    }
+                    else
+                    {
+                        door.dT.dialogueIndex = 0;
+
+                        door.dT.TriggerDialogue();
+                    }
+                }
+                else
+                {
+                    door.dT.dialogueIndex = 0;
+
+                    door.dT.TriggerDialogue();
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "Player" && door.point == null)

@@ -18,7 +18,7 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
-        aM = GameObject.FindGameObjectWithTag("Manager").GetComponent<AmbushManager>();
+        aM = GameObject.Find("Manager").GetComponent<AmbushManager>();
 
         GetAdjacents();
     }

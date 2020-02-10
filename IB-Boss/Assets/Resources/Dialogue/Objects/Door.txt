@@ -1,7 +1,12 @@
-﻿You do not have the required key for this door.
+﻿It's locked.
 |
-This door requires a <w>bronze key.<w> Use one?
+~YesNo:Yes(Door[4]),No(Door[5])#0~This door requires a <w>bronze key.<w> Use one?
 |
-This door requires a <w>silver key.<w> Use one?
+~YesNo:Yes(Door[4]),No(Door[5])#0~This door requires a <w>silver key.<w> Use one?
 |
-This door requires a <w>gold key.<w> Use one?
+~YesNo:Yes(Door[4]),No(Door[5])#0~This door requires a <w>gold key.<w> Use one?
+|
+You unlocked the door!
+|
+This door will remain locked...
+For now...

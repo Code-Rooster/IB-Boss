@@ -25,8 +25,13 @@ public class Health : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
 
-        lS = GameObject.FindGameObjectWithTag("SceneLoader").GetComponent<LoadScene>();
+        if (GameObject.FindGameObjectWithTag("SceneLoader") != null)
+        {
+            lS = GameObject.FindGameObjectWithTag("SceneLoader").GetComponent<LoadScene>();
+        }
         yNE = GameObject.FindGameObjectWithTag("DM").GetComponent<YesNoEvents>();
+
+        print("Test" + yNE);
     }
 
     private void Update()
@@ -89,7 +94,10 @@ public class Health : MonoBehaviour
 
         StartCoroutine(lS.LoadAScene(lastScene.ToString()));
 
-        lS = GameObject.FindGameObjectWithTag("SceneLoader").GetComponent<LoadScene>();
+        if (lS != null)
+        {
+            lS = GameObject.FindGameObjectWithTag("SceneLoader").GetComponent<LoadScene>();
+        }
 
         player.SetActive(true);
     }

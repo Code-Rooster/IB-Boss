@@ -76,6 +76,8 @@ public class Telekinesis : MonoBehaviour
             {
                 inOrbit = selected.transform;
 
+                inOrbit.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
                 orbitAcceleration = minAcceleration;
 
                 directionMult = -1;
@@ -85,6 +87,8 @@ public class Telekinesis : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 inOrbit = selected.transform;
+
+                inOrbit.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
                 orbitAcceleration = minAcceleration;
 
@@ -104,7 +108,7 @@ public class Telekinesis : MonoBehaviour
 
             target.z = 0;
 
-            float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 270;
+            float angle = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 270;
 
             inOrbit.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 

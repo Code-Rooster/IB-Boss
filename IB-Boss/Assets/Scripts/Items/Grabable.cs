@@ -80,6 +80,8 @@ public class Grabable : MonoBehaviour
         {
             EntertainerHealth enH = GameObject.Find("The Entertainer").GetComponent<EntertainerHealth>();
 
+            print("I've been hit! Velocity: " + gameObject.GetComponent<Rigidbody2D>().velocity);
+
             if (rb.velocity.x > 10f || rb.velocity.y > 10f)
             {
                 enH.TakeDamage(4f);

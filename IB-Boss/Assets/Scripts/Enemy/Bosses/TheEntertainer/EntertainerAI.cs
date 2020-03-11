@@ -7,16 +7,21 @@ public class EntertainerAI : MonoBehaviour
     public EntertainerHealth health;
 
     public Transform leftHand;
-    private Transform rightHand;
+    public Transform rightHand;
 
-    public GameObject hand;
+    //public GameObject hand;
     public GameObject missile;
 
     private Transform player;
 
     public float fingerGunDuration;
-
+    public float fingerGunMoveSpeed;
+    public float fingerGunTimer = 0;
     public int fingerGunAmount;
+    public float fingerGunVelocityFactor = 1.5f;
+    public float cardBulletForce = 10;
+
+    public GameObject cardBullet;
 
     private bool startedBattle = false;
 
@@ -36,8 +41,8 @@ public class EntertainerAI : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
 
-        leftHand = transform.Find("HandParent").transform.Find("LeftHand").transform;
-        rightHand = transform.Find("HandParent").transform.Find("RightHand").transform;
+        leftHand = transform.Find("HandParent").transform.Find("LeftHand1").transform;
+        rightHand = transform.Find("HandParent").transform.Find("RightHand1").transform;
 
         health = gameObject.GetComponent<EntertainerHealth>();
 
@@ -100,43 +105,99 @@ public class EntertainerAI : MonoBehaviour
         switch (decidedAttack)
         {
             case "FingerGuns":
-                StartCoroutine(FingerGuns());
+                StartCoroutine(AimFingerGuns());
+                StartCoroutine(ShootFingerGuns());
                 break;
             default:
-                print("Default");
+                StartCoroutine(AimFingerGuns());
+                StartCoroutine(ShootFingerGuns());
                 break;
         }
     }
 
-    private IEnumerator FingerGuns()
+    private IEnumerator AimFingerGuns()
     {
-        float timer = 0;
+        fingerGunTimer = 0;
 
-        while (timer < fingerGunDuration)
+        while (fingerGunTimer < fingerGunDuration)
         {
-            float leftAngle = Mathf.Atan2(player.position.y - leftHand.position.y, player.position.x - leftHand.position.y) * Mathf.Rad2Deg;
-            float rightAngle = Mathf.Atan2(player.position.y - rightHand.position.y, player.position.x - rightHand.position.y) * Mathf.Rad2Deg;
+            float leftAngle = Mathf.Atan2((player.position.y + player.GetComponent<Rigidbody2D>().velocity.y / fingerGunVelocityFactor)
+                - leftHand.position.y, 
+                (player.position.x + player.GetComponent<Rigidbody2D>().velocity.x / fingerGunVelocityFactor)
+                - leftHand.position.x) * Mathf.Rad2Deg;
+            float rightAngle = Mathf.Atan2((player.position.y - player.GetComponent<Rigidbody2D>().velocity.y / fingerGunVelocityFactor)
+                - rightHand.position.y,
+                (player.position.x - player.GetComponent<Rigidbody2D>().velocity.x / fingerGunVelocityFactor)
+                - rightHand.position.x) * Mathf.Rad2Deg;
 
-            print("Left angle: " + leftAngle + ", Right angle: " + rightAngle);
+            rightHand.transform.rotation = Quaternion.Lerp(rightHand.transform.rotation,
+                Quaternion.Euler(new Vector3(0, 0, rightAngle + 90)), 
+                fingerGunMoveSpeed * Time.deltaTime);
 
-            
-            rightHand.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rightAngle + 90));
+            leftHand.transform.rotation = Quaternion.Lerp(leftHand.transform.rotation,
+                Quaternion.Euler(new Vector3(0, 0, leftAngle + 90)),
+                fingerGunMoveSpeed * Time.deltaTime);
 
-            leftHand.transform.rotation = Quaternion.Euler(new Vector3(0, 0, leftAngle + 90));
-
-            timer += Time.deltaTime;
+            fingerGunTimer += Time.deltaTime;
 
             yield return null;
+        }
+
+        print("Time's up!");
+    }
+
+    private IEnumerator ShootFingerGuns()
+    {
+        float amount = fingerGunAmount;
+
+        bool leftHandShotLast = false;
+
+        while (fingerGunTimer < fingerGunDuration)
+        {
+            Transform handPos = null;
+
+            if (!leftHandShotLast)
+            {
+                if (GameObject.Find("LeftHand1") != null)
+                {
+                    handPos = GameObject.Find("LeftHand1").transform;
+
+                    leftHandShotLast = true;
+                }
+                else if (GameObject.Find("RightHand1") != null)
+                {
+                    handPos = GameObject.Find("RightHand1").transform;
+                }
+            }
+            else
+            {
+                if (GameObject.Find("RightHand1") != null)
+                {
+                    handPos = GameObject.Find("RightHand1").transform;
+
+                    leftHandShotLast = false;
+                }
+                else if (GameObject.Find("LeftHand1") != null)
+                {
+                    handPos = GameObject.Find("LeftHand1").transform;
+                }
+            }
+
+            GameObject shotBullet = Instantiate(cardBullet, handPos.position, handPos.rotation);
+
+            shotBullet.GetComponent<Rigidbody2D>().AddForce(-shotBullet.transform.up * cardBulletForce);
+
+            yield return new WaitForSeconds(fingerGunDuration / amount);
         }
     }
 
     public void StartHandMissile()
     {
-        Vector3 handPos = hand.transform.position;
+        //Vector3 handPos = hand.transform.position;
 
-        GameObject handMissile = Instantiate(missile, handPos, Quaternion.identity);
+        //GameObject handMissile = Instantiate(missile, handPos, Quaternion.identity);
 
-        hand.SetActive(false);
+        //hand.SetActive(false);
     }
 
     public void SetIsAttackingTrue()

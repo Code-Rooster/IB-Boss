@@ -8,6 +8,8 @@ public class HandAI : MonoBehaviour
 
     public bool beenGrabbed = false;
 
+    public Health health;
+
     private void Update()
     {
         if (GameObject.Find("Player").transform.Find("Orbit").GetComponent<Telekinesis>().inOrbit == transform)
@@ -27,6 +29,14 @@ public class HandAI : MonoBehaviour
             );
 
             transform.up = -gameObject.GetComponent<Rigidbody2D>().velocity;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Player")
+        {
+            health.LoseHealth(5);
         }
     }
 }

@@ -15,7 +15,7 @@ public class RabbitSpawner : MonoBehaviour
         {
             if (lastRabbit != null)
             {
-                lastRabbit.transform.position = transform.Find("HandParent").transform.Find("RightHand").transform.position;
+                //lastRabbit.transform.position = transform.Find("HandParent").transform.Find("RightHand").transform.position;
             }
         }
     }

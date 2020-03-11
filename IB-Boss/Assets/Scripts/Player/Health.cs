@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Health : MonoBehaviour
 {
@@ -10,14 +12,31 @@ public class Health : MonoBehaviour
 
     public GameObject player;
 
+    public TMPro.TMP_Text healthText;
+    public Image healthBar;
+
+    public SpriteRenderer sR;
+
+    public Color32 hurtColor;
+
     private string lastScene;
 
-    public float maxHealth = 2;
+    public float invincibilityTime;
+
+    [Range(0.0f, 10.0f)]
+    public float maxHealth = 10;
+    [Range(0.0f, 10.0f)]
     public float currentHealth;
+
+    public float healthBarSpeed;
+
+    public bool canTakeDamage = true;
 
     private bool isDying = false;
 
     public int deathCount;
+
+    public int flashIters;
 
     private void Start()
     {
@@ -48,6 +67,11 @@ public class Health : MonoBehaviour
             }
         }
 
+        healthText.text = currentHealth.ToString() + " / " + maxHealth.ToString();
+        //healthBar.fillAmount = (currentHealth / maxHealth);
+
+        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, currentHealth / maxHealth, healthBarSpeed);
+
         if (currentHealth <= 0 && !isDying)
         {
             Die();
@@ -61,7 +85,36 @@ public class Health : MonoBehaviour
 
     public void LoseHealth(float amount)
     {
-        currentHealth -= amount;
+        if (canTakeDamage)
+        {
+            currentHealth -= amount;
+
+            StartCoroutine(InvincibilityTimer());
+            StartCoroutine(InvincibilityAnimate());
+        }
+    }
+
+    private IEnumerator InvincibilityTimer()
+    {
+        canTakeDamage = false;
+
+        yield return new WaitForSeconds(invincibilityTime);
+
+        canTakeDamage = true;
+    }
+
+    private IEnumerator InvincibilityAnimate()
+    {
+        for (int i = 0; i < flashIters; i++)
+        {
+            sR.color = hurtColor;
+
+            yield return new WaitForSeconds(flashIters / (2 * invincibilityTime));
+
+            sR.color = Color.white;
+
+            yield return new WaitForSeconds(flashIters / (2 * invincibilityTime));
+        }
     }
 
     public void Die()

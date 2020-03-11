@@ -84,19 +84,15 @@ public class Grabable : MonoBehaviour
 
             if (rb.velocity.x > 10f || rb.velocity.y > 10f)
             {
-                enH.TakeDamage(4f);
+                enH.TakeDamage(20f);
             }
             else if (rb.velocity.x > 5f || rb.velocity.y > 5f)
             {
-                enH.TakeDamage(3f);
+                enH.TakeDamage(10f);
             }
-            else if (rb.velocity.x > 2.5f || rb.velocity.y > 2.5f)
+            else if (rb.velocity.x > 0.05f || rb.velocity.y > 0.05f)
             {
-                enH.TakeDamage(2f);
-            }
-            else if (rb.velocity.x > 0.5f || rb.velocity.y > 0.5f)
-            {
-                enH.TakeDamage(1f);
+                enH.TakeDamage(5f);
             }
         }
 
